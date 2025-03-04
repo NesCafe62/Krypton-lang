@@ -150,16 +150,16 @@ Index x = 3; // also int variable
 - [ ] String interpolation `x = ${x}`
 - [ ] `use` operator for scopes
 - [ ] Modules (imports/exports)
-- [ ] Number iterals syntax (0xFF b0101 1_250_000)
+- [ ] Number iterals syntax (`0xFF`, `b0101`, `1_250_000`)
 - [ ] Strings, arrays, objects (structs and/or classes, need research)
-- [ ] Functions, Fn<> types, lambdas
+- [ ] Functions, `Fn<>` types, lambdas
 - [ ] Tuple types (as stack or register allocations)
 - [ ] Generic types support
-- [ ] Option/Nullable type (Opt<T>)
-- [ ] Iterators (Enumerable<T>)
+- [ ] Option/Nullable type (`Opt<T>`)
+- [ ] Iterators (`Enumerable<T>`)
 - [ ] Custom operator definitions
 - [ ] Refs {probably}
-- [ ] Built-ins like Map<K,T>, Set<T>
+- [ ] Built-ins like `Map<K,T>`, `Set<T>`
 
 
 ## Compiler extensions
