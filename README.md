@@ -143,39 +143,23 @@ Index x = 3; // also int variable
 
 ## Todo
 
-[ ] Update grammar.txt (it's outdated)
-
-[ ] Other primitive types (currently only `int` and `bool`)
-
-[ ] Implement generator for linux fasm and test it
-
-[ ] Type casting (explicit)
-
-[ ] String interpolation `x = ${x}`
-
-[ ] `use` operator for scopes
-
-[ ] Modules (imports/exports)
-
-[ ] Number iterals syntax (0xFF b0101 1_250_000)
-
-[ ] Strings, arrays, objects (structs and/or classes, need research)
-
-[ ] Functions, Fn<> types, lambdas
-
-[ ] Tuple types (as stack or register allocations)
-
-[ ] Generic types support
-
-[ ] Option/Nullable type (Opt<T>)
-
-[ ] Iterators (Enumerable<T>)
-
-[ ] Custom operator definitions
-
-[ ] Refs {probably}
-
-[ ] Built-ins like Map<K,T>, Set<T>
+- [ ] Update grammar.txt (it's outdated)
+- [ ] Other primitive types (currently only `int` and `bool`)
+- [ ] Implement generator for linux fasm and test it
+- [ ] Type casting (explicit)
+- [ ] String interpolation `x = ${x}`
+- [ ] `use` operator for scopes
+- [ ] Modules (imports/exports)
+- [ ] Number iterals syntax (0xFF b0101 1_250_000)
+- [ ] Strings, arrays, objects (structs and/or classes, need research)
+- [ ] Functions, Fn<> types, lambdas
+- [ ] Tuple types (as stack or register allocations)
+- [ ] Generic types support
+- [ ] Option/Nullable type (Opt<T>)
+- [ ] Iterators (Enumerable<T>)
+- [ ] Custom operator definitions
+- [ ] Refs {probably}
+- [ ] Built-ins like Map<K,T>, Set<T>
 
 
 ## Compiler extensions
@@ -195,15 +179,11 @@ Making custom extension:
 
 ## Compilation targets
 
-[X] Win x86 64-bit (fasm)
-
-[ ] Linux x86 64-bit (fasm)
-
-[ ] Win x86 64-bit (nasm) {probably}
-
-[ ] Linux x86 64-bit (nasm) {probably}
-
-[ ] LLVM IR {probably}
+- [X] Win x86 64-bit (fasm)
+- [ ] Linux x86 64-bit (fasm)
+- [ ] Win x86 64-bit (nasm) {probably}
+- [ ] Linux x86 64-bit (nasm) {probably}
+- [ ] LLVM IR {probably}
 
 
 ## Installation
