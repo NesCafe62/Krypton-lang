@@ -1,0 +1,44 @@
+Program [
+    TypeDeclaration {
+        identifier: Identifier { name: `i32` }
+        type: TypeExpression {
+            name: `Int32`
+        }
+    }
+    AssignmentExpression {
+        operator: `=`
+        left: VariableDeclaration {
+            identifier: Identifier { name: `x` }
+            mutable: true
+            type: TypeExpression {
+                name: `i32`
+            }
+        }
+        right: LiteralInt { value: `1` }
+    }
+    ForLoopStatement {
+        identifier: VariableDeclaration {
+            identifier: Identifier { name: `i` }
+            mutable: true
+            type: TypeExpression {
+                name: `i32`
+            }
+        }
+        exclusive: true
+        from: LiteralInt { value: `1` }
+        to: LiteralInt { value: `10` }
+        statements: [
+            IOPrintStatement {
+                value: Identifier { name: `i` }
+            }
+            AssignmentExpression {
+                operator: `+=`
+                left: Identifier { name: `x` }
+                right: Identifier { name: `i` }
+            }
+        ]
+    }
+    IOPrintStatement {
+        value: Identifier { name: `x` }
+    }
+]

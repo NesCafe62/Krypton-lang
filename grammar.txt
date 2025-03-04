@@ -1,0 +1,55 @@
+Program:
+	| StatementsList
+
+Statement:
+	| NoopStatement
+	| AssignmentStatement `;`	| ReturnStatement `;`	| ScopeStatement		| UseStatement			| Expression `;`
+	| IfStatement				| SwitchStatement		| ForLoopStatement		| WhileLoopStatement	| DoWhileLoopStatement
+	| VariableDeclaration `;`	| FunctionDeclaration	| OperatorDeclaration	| ClassDeclaration		| InterfaceDeclaration	| TypeDeclaration
+
+NoopStatement:
+	| `;`
+
+VariableDeclaration:
+	| TypeExpression Identifier
+	| TypeExpression Identifier `=` Expression
+	| `mut` TypeExpression Identifier
+	| `mut` TypeExpression Identifier `=` Expression
+
+AssignmentStatement:
+	| LValue `=` Expression
+	| `(` LValuesList `)` `=` TupleExpression
+	| `(` LValuesList `)` `=` FunctionCall
+
+LValue:
+	| PropertyOperator		| IndexOperator		| Identifier
+
+Expression:
+	| `(` Expression `)`
+	| BinaryOperator		| UnaryOperator		| LambdaDefinition
+	| PropertyOperator		| IndexOperator		| FunctionCall		| ConstructorCall
+	| Identifier			| TypeCast
+	| LiteralInt			| LiteralString		| `true`			| `false`			| `null`
+
+ConstructorCall:
+	| `new` TypeExpression `(` ArgumentsList `)`
+	| `new` TypeExpression `{` PropertiesList `}`
+
+FunctionCall:
+	| PropertyOperator `(` ExpressionsList `)`
+	| IndexOperator `(` ExpressionsList `)`
+	| FunctionCall `(` ExpressionsList `)`
+	| Identifier `(` ExpressionsList `)`
+
+LambdaDefinition:
+	| `(` ArgumentsList `)` `=>` Expression
+	| `(` ArgumentsList `)` `=>` `{` StatementsList `}`
+	| Argument `=>` Expression
+	| Argument `=>` `{` StatementsList `}`
+
+FunctionDeclaration:
+	| `fn` Identifier `(` ArgumentsList `)` `:` TypeExpression `{` StatementsList `}`
+	| `inline` `fn` Identifier `(` ArgumentsList `)` `:` TypeExpression `{` StatementsList `}`
+
+TypeDeclaration:
+	| `type` Identifier `=` TypeExpression `;`
