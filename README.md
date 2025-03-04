@@ -128,18 +128,18 @@ Index x = 3; // also int variable
 
 ## Implemented
 
-- Math operations with precedence and grouping
-- Variables (mutable/immutable)
-- Branching and loops (`for`, `while`)
-- Variables check initialized before use (with consideration of branching)
-- Immutable variables check no reassignment, initialized only once (with consideration of branching)
-- Type checking (need testing)
-- Type inference (need testing)
-- Type aliases (need testing)
-- Transforming AST and tokens stream by compiler extensions (built-in and custom)
-- Dead code removing (uncovered edgecases)
-- Compile time const expression evaluation (uncovered edgecases)
-- Support for generic types in tokenizer (`<`, `>`, `>>` tokens not to be confused with operators. tracking if identifier is a declared type name). to better support extensions that consume/transform a stream of tokens
+- [X] Math operations with precedence and grouping
+- [X] Variables (mutable/immutable)
+- [X] Branching and loops (`for`, `while`)
+- [X] Variables check initialized before use (with consideration of branching)
+- [X] Immutable variables check no reassignment, initialized only once (with consideration of branching)
+- [X] Type checking (need testing)
+- [X] Type inference (need testing)
+- [X] Type aliases (need testing)
+- [X] Transforming AST and tokens stream by compiler extensions (built-in and custom)
+- [X] Dead code removing (uncovered edgecases)
+- [X] Compile time const expression evaluation (uncovered edgecases)
+- [X] Support for generic types in tokenizer (`<`, `>`, `>>` tokens not to be confused with operators. tracking if identifier is a declared type name). to better support extensions that consume/transform a stream of tokens
 
 ## Todo
 
