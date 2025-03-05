@@ -13,6 +13,7 @@
 
 `bool` - `Bool` type alias
 
+---
 ### Variables
 Immutable by default
 ```js
@@ -32,6 +33,7 @@ x = 3; // no error
 mut y = 2; // type inferred as int
 ```
 
+---
 ### Operators
 
 Binary math (int, int -> int):
@@ -86,6 +88,7 @@ Assignment unary operators (int -> int):
 - `++` var
 - `--` var
 
+---
 ### Branching
 ```js
 if (x < 0) {
@@ -152,7 +155,7 @@ Index x = 3; // also int variable
 - [ ] String interpolation `x = ${x}`
 - [ ] `use` operator for scopes
 - [ ] Modules (imports/exports)
-- [ ] Number iterals syntax (`0xFF`, `b0101`, `1_250_000`)
+- [ ] Number literals syntax (`0xFF`, `b0101`, `1_250_000`)
 - [ ] Strings, arrays, objects (structs and/or classes, need research)
 - [ ] Functions, `Fn<>` types, lambdas
 - [ ] Tuple types (as stack or register allocations)
