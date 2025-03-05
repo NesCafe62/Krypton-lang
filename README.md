@@ -131,6 +131,7 @@ Index x = 3; // also int variable
 - [X] Math operations with precedence and grouping
 - [X] Variables (mutable/immutable)
 - [X] Branching and loops (`for`, `while`)
+- [X] Sinlge line, multi-line comments
 - [X] Variables check initialized before use (with consideration of branching)
 - [X] Immutable variables check no reassignment, initialized only once (with consideration of branching)
 - [X] Type checking (need testing)
@@ -145,6 +146,7 @@ Index x = 3; // also int variable
 
 - [ ] Update grammar.txt (it's outdated)
 - [ ] Other primitive types (currently only `int` and `bool`)
+- [ ] Nested multi-line comments (`/* /* ... */ */`)
 - [ ] Implement generator for linux fasm and test it
 - [ ] Type casting (explicit)
 - [ ] String interpolation `x = ${x}`
