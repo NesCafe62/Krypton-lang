@@ -7,12 +7,12 @@ if ($argc < 2) {
 }
 
 require_once('Compiler.php');
-require_once('Extensions\ExtCheckTypesAndVariables.php');
-require_once('Extensions\ExtEvaluateConstExpressions.php');
-require_once('Extensions\ExtRemoveDeadCode.php');
+require_once('Extensions/ExtCheckTypesAndVariables.php');
+require_once('Extensions/ExtEvaluateConstExpressions.php');
+require_once('Extensions/ExtRemoveDeadCode.php');
 
-require_once('Generators\GeneratorDumpAst.php');
-require_once('Generators\GeneratorFasm_win_x86_64.php');
+require_once('Generators/GeneratorDumpAst.php');
+require_once('Generators/GeneratorFasm_win_x86_64.php');
 
 // for windows
 // compile to asm (but keep old asm file in case of compile error):

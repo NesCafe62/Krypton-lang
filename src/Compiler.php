@@ -1,28 +1,28 @@
 <?php
 // require_once('Enum\CompileTarget.php');
 
-require_once('Lang\Exceptions\CompilerException.php');
-require_once('Lang\Exceptions\CompilerRuntimeException.php');
+require_once('Lang/Exceptions/CompilerException.php');
+require_once('Lang/Exceptions/CompilerRuntimeException.php');
 
-require_once('Lang\Extensions\TransformMode.php');
-require_once('Lang\Extensions\CompilerExtension.php');
+require_once('Lang/Extensions/TransformMode.php');
+require_once('Lang/Extensions/CompilerExtension.php');
 
-require_once('Lang\Tokenizer\TokenType.php');
-require_once('Lang\Tokenizer\Token.php');
-require_once('Lang\Parser\NodeType.php');
-require_once('Lang\Parser\Node.php');
+require_once('Lang/Tokenizer/TokenType.php');
+require_once('Lang/Tokenizer/Token.php');
+require_once('Lang/Parser/NodeType.php');
+require_once('Lang/Parser/Node.php');
 
-require_once('Lang\Lang.php');
+require_once('Lang/Lang.php');
 
 require_once('Tokenizer.php');
 require_once('Parser.php');
 
-require_once('TokensStream\TokensStreamInterface.php');
-require_once('TokensStream\TokensStream.php');
+require_once('TokensStream/TokensStreamInterface.php');
+require_once('TokensStream/TokensStream.php');
 
-require_once('Lang\Generator\Allocation.php');
-require_once('Lang\Generator\Instruction.php');
-require_once('Lang\Generator\GeneratorInterface.php');
+require_once('Lang/Generator/Allocation.php');
+require_once('Lang/Generator/Instruction.php');
+require_once('Lang/Generator/GeneratorInterface.php');
 
 
 
