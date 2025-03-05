@@ -170,7 +170,7 @@ Index x = 3; // also int variable
 - [ ] String interpolation `x = ${x}`
 - [ ] `use` operator for scopes
 - [ ] Modules (imports/exports)
-- [ ] Number literals syntax (`0xFF`, `b0101`, `1_250_000`)
+- [ ] Number literals syntax (`0xFF`, `0b0101`, `1_250_000`)
 - [ ] Strings, arrays, objects (structs and/or classes, need research)
 - [ ] Functions, `Fn<>` types, lambdas
 - [ ] Tuple types (as stack or register allocations)
