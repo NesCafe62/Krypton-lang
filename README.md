@@ -207,15 +207,15 @@ $ git clone https://github.com/NesCafe62/Krypton-lang.git .
 
 compile .kr file to .asm
 ```sh
-$ php src\index.php test.kr > test.asm
+$ php src/index.php test.kr > test.asm
 ```
 
 compile .kr file and dump AST with `-ast` flag
 ```sh
-$ php src\index.php test.kr -ast > test.ast
+$ php src/index.php test.kr -ast > test.ast
 ```
 
 compile .kr file and compile to binary using fasm (command for windows)
 ```sh
-php src\index.php test.kr > test.asm && fasm.exe test.asm
+php src/index.php test.kr > test.asm && fasm.exe test.asm
 ```
