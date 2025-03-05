@@ -1,5 +1,19 @@
 # Krypton lang
 
+Idea of a new strong-typed language that will be familiar for JavaScript developers, but with native and crossplatform compilation (hopefully better performance and less runtime/compiler complexity) and zero dependencies if possible (that can run even on older machines). Not targeting web platform for now, but might be considered (using wasm or vanilla js, last one can be tricky). No plans for Mac or embedded for now, possible in future by adding LLVM IR target.
+
+## Key goals
+- Strong-typed. Increase the benefits of static analysis
+- Simple, easy to learn (Not as complicated as rust and c++, but not too simple as go). No macros if possible
+- Short and pretty syntax, wihout complication of control flow. No `public abstract static final synchronized` or things like `void ** (*d) (int &, char **(*)(char *, char **))`
+- Minimal dependencies
+- Mainly focused on native compilation
+- Cross-platform
+- Extendable language features (including syntax sugar) by extensions. Make it so simple, that every programmer can do it easily
+- Multi-paradigm. Procedural, functional, OOP (same capabilities as in JS and TS, maybe with addition of pipe operator `|>`)
+
+
+---
 ## Language specs
 > listed only currently implemented types and features
 
