@@ -129,6 +129,7 @@ type Index = i32;
 Index x = 3; // also int variable
 ```
 
+---
 ## Implemented
 
 - [X] Math operations with precedence and grouping
@@ -191,6 +192,7 @@ Making custom extension:
 - [ ] LLVM IR {probably}
 
 
+---
 ## Installation
 Requirements:
 
