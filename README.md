@@ -167,7 +167,7 @@ Index x = 3; // also int variable
 - [ ] Nested multi-line comments (`/* /* ... */ */`)
 - [ ] Implement generator for linux fasm and test it
 - [ ] Type casting (explicit)
-- [ ] String interpolation `x = ${x}`
+- [ ] String interpolation ``` `x = ${x}` ```
 - [ ] `use` operator for scopes
 - [ ] Modules (imports/exports)
 - [ ] Number literals syntax (`0xFF`, `0b0101`, `1_250_000`)
