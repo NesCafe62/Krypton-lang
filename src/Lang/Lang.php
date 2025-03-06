@@ -32,7 +32,7 @@ class Lang {
 
 	public static $keywords = [
 		'ret' => TokenType::KEYWORD_RET,
-		'fn' => TokenType::KEYWORD_FN,
+		'func' => TokenType::KEYWORD_FUNC,
 		'if' => TokenType::KEYWORD_IF,
 		'else' => TokenType::KEYWORD_ELSE,
 		'for' => TokenType::KEYWORD_FOR,

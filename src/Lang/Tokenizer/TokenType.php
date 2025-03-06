@@ -34,7 +34,7 @@ class TokenType {
 
 
 	public const KEYWORD_RET = 101;
-	public const KEYWORD_FN = 102;
+	public const KEYWORD_FUNC = 102;
 	public const KEYWORD_IF = 103;
 	public const KEYWORD_ELSE = 104;
 	public const KEYWORD_FOR = 105;
