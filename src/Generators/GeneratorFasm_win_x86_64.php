@@ -33,6 +33,7 @@ class GeneratorFasm_win_x86_64 implements GeneratorInterface {
 
 	protected const ROOT_SCOPE_NESTING = 1;
 
+	// registers
 	protected const REGISTER_NONE = 0;
 	protected const REGISTER_A = 1;
 	protected const REGISTER_C = 2;
@@ -47,6 +48,7 @@ class GeneratorFasm_win_x86_64 implements GeneratorInterface {
 	protected const REGISTER_14 = 11;
 	protected const REGISTER_15 = 12;
 
+	// instruction argument types
 	protected const ARG_NONE = 0;
 	protected const ARG_IMMEDIATE = 1;
 	protected const ARG_REGISTER = 2;
@@ -56,6 +58,7 @@ class GeneratorFasm_win_x86_64 implements GeneratorInterface {
 	protected const ARG_STACK_16 = 6 + self::SIZE_16;
 	protected const ARG_STACK_8 = 6 + self::SIZE_8;
 
+	// allocation types
 	protected const ALLOCATION_IMMEDIATE = 1;
 	protected const ALLOCATION_REGISTER = 2;
 	protected const ALLOCATION_RESERVED = 4;

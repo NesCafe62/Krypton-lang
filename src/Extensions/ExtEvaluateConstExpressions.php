@@ -3,6 +3,13 @@
 class ExtEvaluateConstExpressions extends CompilerExtension {
 
 	public $transformMode = TransformMode::AST;
+	
+	/** @var string */
+	protected $fileName;
+	
+	public function __construct(string $fileName) {
+		$this->fileName = $fileName;
+	}
 
 	/**
 	 * @param Node|NodeExpressionBinary|NodeExpressionUnary|object $node
@@ -58,8 +65,14 @@ class ExtEvaluateConstExpressions extends CompilerExtension {
 				} else if ($node->operator === '*') {
 					$value = $left->value * $right->value;
 				} else if ($node->operator === '/') {
+					if ($right->value === 0) {
+						throw new CompilerException("{$this->fileName}:{$node->line}:{$node->col}: Division by zero");
+					}
 					$value = intdiv($left->value, $right->value);
 				} else if ($node->operator === '%') {
+					if ($right->value === 0) {
+						throw new CompilerException("{$this->fileName}:{$node->line}:{$node->col}: Division by zero");
+					}
 					$value = $left->value % $right->value;
 				} else if ($node->operator === '&') {
 					$value = $left->value & $right->value;
@@ -70,7 +83,7 @@ class ExtEvaluateConstExpressions extends CompilerExtension {
 				} else {
 					throw new CompilerRuntimeException("Operator '{$node->operator}' is not implemented for integer literals");
 				}
-				// todo `<<` `>>`
+				// todo `<<` `>>` `==` `!=` `>` `<` `<=` `>=`
 				return (object) [
 					'node' => NodeType::LITERAL_INT,
 					'value' => $value,
@@ -89,6 +102,7 @@ class ExtEvaluateConstExpressions extends CompilerExtension {
 				} else {
 					throw new CompilerRuntimeException("Operator '{$node->operator}' is not implemented for boolean literals");
 				}
+				// todo `==` `!=`
 				return (object) [
 					'node' => NodeType::LITERAL_BOOL,
 					'value' => $value,

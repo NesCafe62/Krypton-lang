@@ -27,7 +27,7 @@ $code = file_get_contents($fileName);
 
 $compiler = new Compiler([
 	// TransformMode::AST
-	new ExtEvaluateConstExpressions(),
+	new ExtEvaluateConstExpressions($fileName),
 
 	// TransformMode::AST_ROOT
 	new ExtCheckTypesAndVariables($fileName),
