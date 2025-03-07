@@ -73,10 +73,10 @@ class Generator_avr_atmega328 implements GeneratorInterface {
 	];
 	
 	protected function init(): void {
-		/* $this->stackPos = 0;
-		$this->scopeNesting = self::ROOT_SCOPE_NESTING;
-		$this->identifiers = [];
-		$this->identifiersStack = []; */
+		// $this->stackPos = 0;
+		// $this->scopeNesting = self::ROOT_SCOPE_NESTING;
+		// $this->identifiers = [];
+		// $this->identifiersStack = [];
 		$this->allocated = [
 			self::REGISTER_R0 => null,
 			self::REGISTER_R1 => null,
@@ -88,11 +88,12 @@ class Generator_avr_atmega328 implements GeneratorInterface {
 			self::REGISTER_R7 => null,
 		];
 		$this->instructions = [];
-		/* $this->prevSwappableIndex = 0;
+		/* $this->prevSwappableIndex = 0; */
 
-		$this->labelIndex = 0; */
+		// $this->labelIndex = 0;
 	}
 	
+	// https://github.com/Ro5bert/avra/blob/afdbda414ba3c062b528d74a3f2139e2418b04ff/src/mnemonic.c#L39
 	protected static $instructionOpCodes = [
 		// instruction => [opCode, ...]
 		'nop'		=> [0x0000], //          0000 0000 0000 0000
@@ -196,7 +197,7 @@ class Generator_avr_atmega328 implements GeneratorInterface {
 		'cbr'		=> [0x7000], // Rd, K    0111 KKKK dddd KKKK ~K
 		'sbrc'		=> [0xfc00], // Rr, b    1111 110r rrrr 0bbb
 		'sbrs'		=> [0xfe00], // Rr, b    1111 111r rrrr 0bbb
-		'bst'		=> [0xfa00], // Rr, b    1111 101d dddd 0bbb
+		'bst'		=> [0xfa00], // Rr, b    1111 101r rrrr 0bbb
 		'bld'		=> [0xf800], // Rd, b    1111 100d dddd 0bbb
 		'in'		=> [0xb000], // Rd, P    1011 0PPd dddd PPPP
 		'out'		=> [0xb800], // P, Rr    1011 1PPr rrrr PPPP
@@ -205,13 +206,13 @@ class Generator_avr_atmega328 implements GeneratorInterface {
 		'sbi'		=> [0x9a00], // P, b     1001 1010 PPPP Pbbb
 		'cbi'		=> [0x9800], // P, b     1001 1000 PPPP Pbbb
 		'lds'		=> [0x9000], // Rd, k    1001 000d dddd 0000 + 16k    (DF_TINY1X | DF_AVR8L)
-		'sts'		=> [0x9200], // k, Rr    1001 001d dddd 0000 + 16k    (DF_TINY1X | DF_AVR8L)
+		'sts'		=> [0x9200], // k, Rr    1001 001r rrrr 0000 + 16k    (DF_TINY1X | DF_AVR8L)
+		/*
 		'ld'		=> [0],      // Rd, __   dummy                        (0)
 		'st'		=> [0],      // __, Rr   dummy                        (0)
 		'ldd'		=> [0],      // Rd, _+q  dummy                        (DF_TINY1X)
 		'std'		=> [0],      // _+q, Rr  dummy                        (DF_TINY1X)
 		'count'		=> [0],      //                                       (0)
-		/*
 		'lpm'		=> [0x9004], // Rd, Z    1001 000d dddd 0100    (DF_NO_LPM|DF_NO_LPM_X)
 		'lpm'		=> [0x9005], // Rd, Z+   1001 000d dddd 0101    (DF_NO_LPM|DF_NO_LPM_X)
 		'elpm'		=> [0x9006], // Rd, Z    1001 000d dddd 0110    (DF_NO_ELPM|DF_NO_ELPM_X)
@@ -362,6 +363,20 @@ class Generator_avr_atmega328 implements GeneratorInterface {
 				echo "                                ; {$instr->text}\n";
 			}
 		}
+	}
+	
+	protected function emitInstructionsHex(): void {
+		$buffer = '';
+		foreach ($this->instructions as $instr) {
+			$opCode = 0;
+			if ($instr->type === self::EMIT_INSTRUCTION) {
+				if ($instr->instruction === 'ldi') {
+					$opCode = 0xFFFF;
+				}
+			}
+			$buffer .= pack('v', $opCode);
+		}
+		fwrite(STDOUT, $buffer);
 	}
 	
 	
