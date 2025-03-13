@@ -106,31 +106,31 @@ Assignment unary operators (int -> int):
 ### Branching
 ```js
 if (x < 0) {
-  // ...
+    // ...
 } else if (x == 0) {
-  // ...
+    // ...
 } else {
-  // ...
+    // ...
 }
 ```
 
 ### `While` loop
 ```js
 mut int x = 1;
-while (x < 10) {
-  x++;
-  io.print(x);
+while (x <= 10) {
+    x++;
+    io.print(x);
 }
 ```
 
 ### `For` loop
 ```js
-for (mut int i in 1..10) { // excluding 10
-  // ...
+for (mut int i in 1..=10) { // including 10
+    // ...
 }
 
-for (mut int i in 1..=10) { // including 10
-  // ...
+for (mut int i in 1..10) { // excluding 10
+    // ...
 }
 ```
 
@@ -224,10 +224,22 @@ $ git clone https://github.com/NesCafe62/Krypton-lang.git .
 
 ## Usage
 
-compile .kr file to .asm
+compile .kr file to .asm (target = `fasm-win-x86-64`)
 ```sh
-$ php src/index.php test.kr > test.asm
+$ php src/index.php test.kr -t fasm-win-x86-64 > test.asm
 ```
+or
+```sh
+$ php src/index.php test.kr --target=fasm-win-x86-64 > test.asm
+```
+
+targets:
+[X] ast
+[ ] llvm
+[ ] fasm-linux-x86-64
+[X] fasm-win-x86-64
+[ ] avr-atmega328
+[ ] avr-atmega328-hex
 
 compile .kr file and dump AST with `-ast` flag
 ```sh
@@ -236,5 +248,5 @@ $ php src/index.php test.kr -ast > test.ast
 
 compile .kr file and compile to binary using fasm (command for windows)
 ```sh
-php src/index.php test.kr > test.asm && fasm.exe test.asm
+php src/index.php test.kr -t fasm-win-x86-64 > test.asm && fasm.exe test.asm
 ```
