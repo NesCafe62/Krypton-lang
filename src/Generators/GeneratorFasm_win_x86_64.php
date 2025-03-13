@@ -34,19 +34,19 @@ class GeneratorFasm_win_x86_64 implements GeneratorInterface {
 	protected const ROOT_SCOPE_NESTING = 1;
 
 	// registers
-	protected const REGISTER_NONE = 0;
-	protected const REGISTER_A = 1;
-	protected const REGISTER_C = 2;
-	protected const REGISTER_D = 3;
-	protected const REGISTER_B = 4;
-	protected const REGISTER_8 = 5;
-	protected const REGISTER_9 = 6;
-	protected const REGISTER_10 = 7;
-	protected const REGISTER_11 = 8;
-	protected const REGISTER_12 = 9;
-	protected const REGISTER_13 = 10;
-	protected const REGISTER_14 = 11;
-	protected const REGISTER_15 = 12;
+	protected const REGISTER_NONE = 12;
+	protected const REGISTER_A = 0;
+	protected const REGISTER_C = 1;
+	protected const REGISTER_D = 2;
+	protected const REGISTER_B = 3;
+	protected const REGISTER_8 = 4;
+	protected const REGISTER_9 = 5;
+	protected const REGISTER_10 = 6;
+	protected const REGISTER_11 = 7;
+	protected const REGISTER_12 = 8;
+	protected const REGISTER_13 = 9;
+	protected const REGISTER_14 = 10;
+	protected const REGISTER_15 = 11;
 
 	// instruction argument types
 	protected const ARG_NONE = 0;
@@ -172,20 +172,10 @@ class GeneratorFasm_win_x86_64 implements GeneratorInterface {
 		$this->scopeNesting = self::ROOT_SCOPE_NESTING;
 		$this->identifiers = [];
 		$this->identifiersStack = [];
-		$this->allocated = [
-			self::REGISTER_A => null,
-			self::REGISTER_C => null,
-			self::REGISTER_D => null,
-			self::REGISTER_B => null,
-			self::REGISTER_8 => null,
-			self::REGISTER_9 => null,
-			self::REGISTER_10 => null,
-			self::REGISTER_11 => null,
-			self::REGISTER_12 => null,
-			self::REGISTER_13 => null,
-			self::REGISTER_14 => null,
-			self::REGISTER_15 => null,
-		];
+		$this->allocated = [];
+		for ($i = self::REGISTER_A; $i <= self::REGISTER_15; $i++) {
+			$this->allocated[$i] = null;
+		}
 		$this->instructions = [];
 		$this->prevSwappableIndex = 0;
 
@@ -454,7 +444,7 @@ class GeneratorFasm_win_x86_64 implements GeneratorInterface {
 	protected function getFreeRegister(): int {
 		// for ($index = $this->lastRegIndex; $index < $this->lastRegIndex + self::REGISTER_9; $index++) {
 		for ($regIndex = self::REGISTER_A; $regIndex <= self::REGISTER_15; $regIndex++) {
-			// $regIndex = 1 + $index % self::REGISTER_9;
+			// $regIndex = 1 + $index % self::REGISTER_15;
 			if ($this->allocated[$regIndex] === null) {
 				return $regIndex;
 			}

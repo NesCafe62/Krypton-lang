@@ -2,6 +2,7 @@
 
 /**
  * @property-read int $type
+ * @property-read int $instructionType
  * @property-read string $instruction
  * @property-read int $arg1Type
  * @property-read int $arg2Type

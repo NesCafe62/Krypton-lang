@@ -1,10 +1,4 @@
 <?php
-if ($argc < 2) {
-	fwrite(STDERR, "compile to asm: php src\index.php test.kr > test.asm\n");
-	fwrite(STDERR, "compile and dump ast: php src\index.php test.kr -ast > test.ast\n");
-	fwrite(STDERR, "compile to exe with fasm: php src\index.php test.kr > test.asm && fasm.exe test.asm\n");
-	exit(1);
-}
 
 require_once('Compiler.php');
 require_once('Extensions/ExtCheckTypesAndVariables.php');
@@ -14,28 +8,102 @@ require_once('Extensions/ExtRemoveDeadCode.php');
 require_once('Generators/GeneratorDumpAst.php');
 require_once('Generators/GeneratorFasm_win_x86_64.php');
 
-// for windows
-// compile to asm (but keep old asm file in case of compile error):
-// php src\index.php test.kr > temp && (move /y temp test.asm > nul) || del temp
+try {
+	$printUsage = false;
+	if ($argc < 2) {
+		$printUsage = true;
+		throw new CompilerException("Empty arguments");
+	}
+
+	$fileName = $argv[1];
+	if (!is_file($fileName)) {
+		$printUsage = true;
+		throw new CompilerException("File not found '{$fileName}'");
+	}
+	$code = file_get_contents($fileName);
+
+	$target = CompileTarget::NONE;
+
+	for ($i = 2; $i < $argc; $i++) {
+		$arg = $argv[$i];
+		if ($arg === '-t' || $arg === '--target') {
+			if ($target === CompileTarget::NONE) {
+				if ($i + 1 >= $argc) {
+					$printUsage = true;
+					throw new CompilerException("Compilation target is not set");
+				}
+				$argTarget = $argv[$i + 1];
+				$target = CompileTarget::$targets[$argTarget];
+			}
+			$i++;
+		} else if (
+			strncmp($arg, '-t=', 3) === 0 ||
+			strncmp($arg, '--target=', 3) === 0
+		) {
+			if ($target === CompileTarget::NONE) {
+				$argTarget = substr($arg, strpos($arg, '=') + 1);
+				$target = CompileTarget::$targets[$argTarget];
+			}
+		} else if ($arg === '-ast') {
+			$target = CompileTarget::DUMP_AST;
+		} else {
+			$printUsage = true;
+			throw new CompilerException("Unknown argument '{$arg}'");
+		}
+	}
+
+	switch ($target) {
+		case CompileTarget::DUMP_AST:
+			$generator = new GeneratorDumpAst();
+			break;
+		case CompileTarget::FASM_WIN_x86_64:
+			$generator = new GeneratorFasm_win_x86_64();
+			break;
+		case CompileTarget::AVR_ATMEGA328:
+			$generator = new Generator_avr_atmega328();
+			break;
+		case CompileTarget::AVR_ATMEGA328_HEX:
+			$generator = new Generator_avr_atmega328(true);
+			break;
+		default:
+			$printUsage = true;
+			throw new CompilerException("Compilation target is not set");
+	}
+
+
+	$compiler = new Compiler([
+		// TransformMode::AST
+		new ExtEvaluateConstExpressions($fileName),
+
+		// TransformMode::AST_ROOT
+		new ExtCheckTypesAndVariables($fileName),
+		new ExtRemoveDeadCode(),
+	]);
+
+	$compiler->compile($code, $fileName, $generator);
+
+} catch (CompilerException $ex) {
+	if ($argc > 1) {
+		fwrite(STDERR, $ex->getMessage() . "\n");
+	}
+	if ($printUsage) {
+		fwrite(STDERR, "usage:\n");
+		fwrite(STDERR, "    php src\index.php <input> [options] > <output>\n");
+		fwrite(STDERR, "options:\n");
+		fwrite(STDERR, "    -t, --target <target>\n");
+		fwrite(STDERR, "                  set compilation target (required)\n");
+		fwrite(STDERR, "                  target: ast | fasm-win-x86-64 | avr-atmega328 | avr-atmega328-hex\n");
+		fwrite(STDERR, "    -ast\n");
+		fwrite(STDERR, "                  dump ast, shorthand of `-t ast`\n");
+		fwrite(STDERR, "example: php src\index.php test.kr -t fasm-win-x86-64 > test.asm\n");
+		fwrite(STDERR, "example: php src\index.php test.kr -ast > test.ast\n");
+		fwrite(STDERR, "example: php src\index.php test.kr > test.asm && fasm.exe test.asm\n");
+	}
+	exit(1);
+}
+
+// compile to asm for windows, and keep old asm file in case of compile error:
+// php src\index.php test.kr -t fasm-win-x86-64 > temp && (move /y temp test.asm > nul) || del temp
 
 // compile test.asm with fasm and run it:
 // fasm.exe test.asm && test.exe
-
-$isAst = ($argv[2] ?? null === '-ast');
-$fileName = $argv[1];
-$code = file_get_contents($fileName);
-
-$compiler = new Compiler([
-	// TransformMode::AST
-	new ExtEvaluateConstExpressions($fileName),
-
-	// TransformMode::AST_ROOT
-	new ExtCheckTypesAndVariables($fileName),
-	new ExtRemoveDeadCode(),
-]);
-
-$generator = $isAst
-	? new GeneratorDumpAst()
-	: new GeneratorFasm_win_x86_64();
-
-$compiler->compile($code, $fileName, $generator);

@@ -1,5 +1,5 @@
 <?php
-// require_once('Enum\CompileTarget.php');
+require_once('Enum\CompileTarget.php');
 
 require_once('Lang/Exceptions/CompilerException.php');
 require_once('Lang/Exceptions/CompilerRuntimeException.php');
@@ -52,21 +52,16 @@ class Compiler {
 	}
 
 	public function compile(string $code, string $fileName, GeneratorInterface $generator): void {
-		try {
-			$tokens = $this->tokenizer->tokenize($code, $fileName);
-			/* foreach ($tokens as $token) {
-				echo $token->display() . " {$token->line}:{$token->col}\n";
-			} */
+		$tokens = $this->tokenizer->tokenize($code, $fileName);
+		/* foreach ($tokens as $token) {
+			echo $token->display() . " {$token->line}:{$token->col}\n";
+		} */
 
-			$tokens = $this->tokensStream->transformTokens($tokens, $this->extensions);
+		$tokens = $this->tokensStream->transformTokens($tokens, $this->extensions);
 
-			$node = $this->parser->parse($tokens, $fileName, $this->extensions);
+		$node = $this->parser->parse($tokens, $fileName, $this->extensions);
 
-			$generator->generate($node, $fileName);
-		} catch (CompilerException $ex) {
-			fwrite(STDERR, $ex->getMessage() . "\n");
-			exit(1);
-		}
+		$generator->generate($node, $fileName);
 	}
 
 }
