@@ -234,12 +234,12 @@ $ php src/index.php test.kr --target=fasm-win-x86-64 > test.asm
 ```
 
 targets:
-[X] ast
-[ ] llvm
-[ ] fasm-linux-x86-64
-[X] fasm-win-x86-64
-[ ] avr-atmega328
-[ ] avr-atmega328-hex
+- [X] ast
+- [ ] llvm
+- [ ] fasm-linux-x86-64
+- [X] fasm-win-x86-64
+- [ ] avr-atmega328
+- [ ] avr-atmega328-hex
 
 compile .kr file and dump AST with `-ast` flag
 ```sh
