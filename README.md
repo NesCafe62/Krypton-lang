@@ -248,5 +248,5 @@ $ php src/index.php test.kr -ast > test.ast
 
 compile .kr file and compile to binary using fasm (command for windows)
 ```sh
-php src/index.php test.kr -t fasm-win-x86-64 > test.asm && fasm.exe test.asm
+$ php src/index.php test.kr -t fasm-win-x86-64 > test.asm && fasm.exe test.asm
 ```
