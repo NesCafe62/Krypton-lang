@@ -5,7 +5,7 @@ Idea of a new strong-typed language that will be familiar for JavaScript develop
 > The motivation is: if I wanted to have the nicest language for me, what it would look like?
 > Simple and readable. But runtime also matters, it should be possible to produce native executable for different platforms that will just run (without dependencies of having system library versions or any runtime - if any then make it just as simple as dump to path and config the app to use that path {with possibility to set such path per app!}).
 > Also make it easy to add any syntax sugar, if its just simple replacement rules.
-> So, is too hard problem to make such language?
+> So, is it too hard problem to make such language?
 
 ## Key goals
 - Strong-typed. Increase the benefits of static analysis
