@@ -2,6 +2,11 @@
 
 Idea of a new strong-typed language that will be familiar for JavaScript developers, but with native and crossplatform compilation (hopefully better performance and less runtime/compiler complexity) and zero dependencies if possible (that can run even on older machines). Not targeting web platform for now, but might be considered (using wasm or vanilla js, last one can be tricky). No plans for Mac or embedded for now, possible in future by adding LLVM IR target.
 
+> The motivation is: if I wanted to have the nicest language for me, what it would look like?
+> Simple and readable. But runtime also matters, it should be possible to produce native executable for different platforms that will just run.
+> Also make it easy to add any syntax sugar, if its just simple replacement rules.
+> So, is too hard problem to make such language?
+
 ## Key goals
 - Strong-typed. Increase the benefits of static analysis
 - Simple, easy to learn (Not as complicated as rust and c++, but not too simple as go). No macros if possible
