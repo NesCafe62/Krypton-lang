@@ -8,7 +8,7 @@ class ExtRemoveDeadCode extends CompilerExtension {
 	 * @param NodeProgram|object $node
 	 * @return NodeProgram
 	 */
-	public function transformASTRootNode(object $node): object {
+	public function transformASTRootNode(object $node): ?object {
 		// todo: fail on assignment to non assignable expression (done?). currently such expressions are parsed as binaryExpression with `=` operator instead of assignmentExpression
 		// and it will just remove such code with no warnings. which is not right
 		// (x + 2) = 5;

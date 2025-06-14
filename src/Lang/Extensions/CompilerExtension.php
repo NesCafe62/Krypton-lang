@@ -16,9 +16,9 @@ abstract class CompilerExtension {
 
 	/**
 	 * @param NodeProgram|object $node
-	 * @return NodeProgram
+	 * @return null|NodeProgram
 	 */
-	public function transformASTRootNode(object $node): object {
+	public function transformASTRootNode(object $node): ?object {
 		return $node;
 	}
 

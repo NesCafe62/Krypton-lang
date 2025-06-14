@@ -2,7 +2,11 @@
 
 class GeneratorDumpAst implements GeneratorInterface {
 
-	function generate(object $node, string $fileName): void {
+	/**
+	 * @param NodeProgram|object $node
+	 * @param string $fileName
+	 */
+	public function generate(object $node, string $fileName): void {
 		echo Lang::displayNode($node);
 	}
 

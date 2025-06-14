@@ -131,7 +131,7 @@ class Parser {
 		} else {
 			$token = $this->tokens[$this->current - 1];
 		}
-		$display = Lang::displayToken($tokenType) . ":`{$value}`";
+		$display = Lang::displayToken($tokenType, $value);
 		throw new CompilerException("{$this->fileName}:{$token->line}:{$token->col}: Expected {$display}");
 	}
 
@@ -146,9 +146,9 @@ class Parser {
 		}
 		$typeExpr = $this->visitNode(
 			(object) [
-				'node' => NodeType::TYPE_EXPRESSION,
-				'name' => Lang::$types[$tokenType->value] ?? $tokenType->value,
-				'line' => $tokenType->line, 'col' => $tokenType->col,
+				"node" => NodeType::TYPE_EXPRESSION,
+				"name" => Lang::$types[$tokenType->value] ?? $tokenType->value,
+				"line" => $tokenType->line, "col" => $tokenType->col,
 				// todo: generics support
 				// 'args' => [],
 			]
@@ -169,9 +169,9 @@ class Parser {
 		}
 		return $this->visitNode(
 			(object) [
-				'node' => NodeType::IDENTIFIER,
-				'name' => $tokenIdentifier->value,
-				'line' => $tokenIdentifier->line, 'col' => $tokenIdentifier->col,
+				"node" => NodeType::IDENTIFIER,
+				"name" => $tokenIdentifier->value,
+				"line" => $tokenIdentifier->line, "col" => $tokenIdentifier->col,
 			]
 		);
 	}
@@ -184,9 +184,9 @@ class Parser {
 		if ($token !== null) {
 			return $this->visitNode(
 				(object) [
-					'node' => NodeType::LITERAL_INT,
-					'value' => (int) $token->value, // maybe keep as string
-					'line' => $token->line, 'col' => $token->col,
+					"node" => NodeType::LITERAL_INT,
+					"value" => (int) $token->value, // maybe keep as string
+					"line" => $token->line, "col" => $token->col,
 				]
 			);
 		}
@@ -194,9 +194,9 @@ class Parser {
 		if ($token != null) {
 			return $this->visitNode(
 				(object) [
-					'node' => NodeType::LITERAL_STRING,
-					'value' => $token->value,
-					'line' => $token->line, 'col' => $token->col,
+					"node" => NodeType::LITERAL_STRING,
+					"value" => $token->value,
+					"line" => $token->line, "col" => $token->col,
 				]
 			);
 		}
@@ -204,9 +204,9 @@ class Parser {
 		if ($token !== null) {
 			return $this->visitNode(
 				(object) [
-					'node' => NodeType::LITERAL_BOOL,
-					'value' => 1,
-					'line' => $token->line, 'col' => $token->col,
+					"node" => NodeType::LITERAL_BOOL,
+					"value" => 1,
+					"line" => $token->line, "col" => $token->col,
 				]
 			);
 		}
@@ -214,9 +214,9 @@ class Parser {
 		if ($token !== null) {
 			return $this->visitNode(
 				(object) [
-					'node' => NodeType::LITERAL_BOOL,
-					'value' => 0,
-					'line' => $token->line, 'col' => $token->col,
+					"node" => NodeType::LITERAL_BOOL,
+					"value" => 0,
+					"line" => $token->line, "col" => $token->col,
 				]
 			);
 		}
@@ -244,7 +244,7 @@ class Parser {
 		$tokenOp = $this->tryConsumeToken(TokenType::OPERATOR);
 		if (
 			$tokenOp !== null &&
-			($tokenOp->value === '++' || $tokenOp->value === '--')
+			($tokenOp->value === "++" || $tokenOp->value === "--")
 		) {
 			$term = (
 				$this->tryConsumeParenExpression(true) ??
@@ -253,11 +253,11 @@ class Parser {
 			);
 			return $this->visitNode(
 				(object) [
-					'node' => NodeType::EXPRESSION_UPDATE,
-					'operator' => $tokenOp->value,
-					'value' => $term,
-					'prefix' => true,
-					'line' => $tokenOp->line, 'col' => $tokenOp->col,
+					"node" => NodeType::EXPRESSION_UPDATE,
+					"operator" => $tokenOp->value,
+					"value" => $term,
+					"prefix" => true,
+					"line" => $tokenOp->line, "col" => $tokenOp->col,
 				]
 			);
 		}
@@ -268,7 +268,7 @@ class Parser {
 			($onlyAssignable ? null : $this->tryConsumeLiteral())
 		);
 		if ($tokenOp !== null) {
-			if ($tokenOp->value !== '!' && $tokenOp->value !== '-' && $tokenOp->value !== '+' && $tokenOp->value !== '~') {
+			if ($tokenOp->value !== "!" && $tokenOp->value !== "-" && $tokenOp->value !== "+" && $tokenOp->value !== "~") {
 				$this->error("Undeclared unary operator '{$tokenOp->value}'");
 			}
 			// $exprRight = $this->tryConsumeExpression() ?? $this->error("Expected expression #2");
@@ -277,10 +277,10 @@ class Parser {
 			}
 			return $this->visitNode(
 				(object) [
-					'node' => NodeType::EXPRESSION_UNARY,
-					'operator' => $tokenOp->value,
-					'value' => $term,
-					'line' => $tokenOp->line, 'col' => $tokenOp->col,
+					"node" => NodeType::EXPRESSION_UNARY,
+					"operator" => $tokenOp->value,
+					"value" => $term,
+					"line" => $tokenOp->line, "col" => $tokenOp->col,
 				]
 			);
 		}
@@ -288,7 +288,7 @@ class Parser {
 		$tokenOp = $this->peekToken(0, TokenType::OPERATOR);
 		if (
 			$tokenOp !== null &&
-			($tokenOp->value === '++' || $tokenOp->value === '--')
+			($tokenOp->value === "++" || $tokenOp->value === "--")
 		) {
 			$this->consume(1);
 			if ($term->node !== NodeType::IDENTIFIER) {
@@ -296,11 +296,11 @@ class Parser {
 			}
 			return $this->visitNode(
 				(object) [
-					'node' => NodeType::EXPRESSION_UPDATE,
-					'operator' => $tokenOp->value,
-					'value' => $term,
-					'prefix' => false,
-					'line' => $tokenOp->line, 'col' => $tokenOp->col,
+					"node" => NodeType::EXPRESSION_UPDATE,
+					"operator" => $tokenOp->value,
+					"value" => $term,
+					"prefix" => false,
+					"line" => $tokenOp->line, "col" => $tokenOp->col,
 				]
 			);
 		}
@@ -328,10 +328,10 @@ class Parser {
 				if ($tokenOp === null) {
 					break;
 				}
-				if ($excludeRangeOp && ($tokenOp->value === '..' || $tokenOp->value === '..=')) {
+				if ($excludeRangeOp && ($tokenOp->value === ".." || $tokenOp->value === "..=")) {
 					break;
 				}
-				if ($tokenOp->value === '++' || $tokenOp->value === '--') {
+				if ($tokenOp->value === "++" || $tokenOp->value === "--") {
 					$this->error("Unary operator '{$tokenOp->value}' can only be used with an assignable expression #2");
 				}
 				[$precedence, $assoc] = Lang::getOperatorInfo($tokenOp->value);
@@ -351,11 +351,11 @@ class Parser {
 				}
 				$expr = $this->visitNode(
 					(object) [
-						'node' => NodeType::EXPRESSION_BINARY,
-						'operator' => $tokenOp->value,
-						'left' => $expr,
-						'right' => $exprRight,
-						'line' => $expr->line, 'col' => $expr->col,
+						"node" => NodeType::EXPRESSION_BINARY,
+						"operator" => $tokenOp->value,
+						"left" => $expr,
+						"right" => $exprRight,
+						"line" => $expr->line, "col" => $expr->col,
 					]
 				);
 			}
@@ -377,9 +377,9 @@ class Parser {
 		$this->consumeTokenOrError(TokenType::SEMICOLON);
 		return $this->visitNodeOrNoOp(
 			(object) [
-				'node' => NodeType::STATEMENT_RETURN,
-				'value' => $value,
-				'line' => $tokenRet->line, 'col' => $tokenRet->col,
+				"node" => NodeType::STATEMENT_RETURN,
+				"value" => $value,
+				"line" => $tokenRet->line, "col" => $tokenRet->col,
 			]
 		);
 	}
@@ -389,21 +389,21 @@ class Parser {
 	 * @return Node|null
 	 */
 	protected function tryConsumeStmtIOPrint(): ?object {
-		$tokenPrint = $this->tryConsumeTokenValue(TokenType::IDENTIFIER, 'io');
+		$tokenPrint = $this->tryConsumeTokenValue(TokenType::IDENTIFIER, "io");
 		if ($tokenPrint === null) {
 			return null;
 		}
-		$this->consumeTokenValueOrError(TokenType::OPERATOR, '.');
-		$this->consumeTokenValueOrError(TokenType::IDENTIFIER, 'print');
+		$this->consumeTokenValueOrError(TokenType::OPERATOR, ".");
+		$this->consumeTokenValueOrError(TokenType::IDENTIFIER, "print");
 		$this->consumeTokenOrError(TokenType::PAREN_OPEN);
 		$value = $this->tryConsumeExpression() ?? $this->error("Expected return value");
 		$this->consumeTokenOrError(TokenType::PAREN_CLOSE);
 		$this->consumeTokenOrError(TokenType::SEMICOLON);
 		return $this->visitNodeOrNoOp(
 			(object) [
-				'node' => NodeType::STATEMENT_IO_PRINT,
-				'value' => $value,
-				'line' => $tokenPrint->line, 'col' => $tokenPrint->col,
+				"node" => NodeType::STATEMENT_IO_PRINT,
+				"value" => $value,
+				"line" => $tokenPrint->line, "col" => $tokenPrint->col,
 			]
 		);
 	}
@@ -446,9 +446,9 @@ class Parser {
 		$this->consumeTokenOrError(TokenType::CURLY_CLOSE);
 		return $this->visitNodeOrNoOp(
 			(object) [
-				'node' => NodeType::STATEMENT_SCOPE,
-				'statements' => $statements,
-				'line' => $tokenCurly->line, 'col' => $tokenCurly->col,
+				"node" => NodeType::STATEMENT_SCOPE,
+				"statements" => $statements,
+				"line" => $tokenCurly->line, "col" => $tokenCurly->col,
 			]
 		);
 	}
@@ -485,11 +485,11 @@ class Parser {
 
 		return $this->visitNodeOrNoOp(
 			(object) [
-				'node' => $isElse ? NodeType::STATEMENT_ELSE_IF : NodeType::STATEMENT_IF,
-				'condition' => $condition,
-				'then' => $then,
-				'else' => $else,
-				'line' => $tokenIf->line, 'col' => $tokenIf->col,
+				"node" => $isElse ? NodeType::STATEMENT_ELSE_IF : NodeType::STATEMENT_IF,
+				"condition" => $condition,
+				"then" => $then,
+				"else" => $else,
+				"line" => $tokenIf->line, "col" => $tokenIf->col,
 			]
 		);
 	}
@@ -511,10 +511,10 @@ class Parser {
 		);
 		return $this->visitNodeOrNoOp(
 			(object) [
-				'node' => NodeType::STATEMENT_WHILE_LOOP,
-				'condition' => $condition,
-				'statements' => $statements,
-				'line' => $tokenWhile->line, 'col' => $tokenWhile->col,
+				"node" => NodeType::STATEMENT_WHILE_LOOP,
+				"condition" => $condition,
+				"statements" => $statements,
+				"line" => $tokenWhile->line, "col" => $tokenWhile->col,
 			]
 		);
 	}
@@ -541,13 +541,13 @@ class Parser {
 		}
 		$this->consumeTokenOrError(TokenType::KEYWORD_IN);
 		$from = $this->tryConsumeExpression(false, true) ?? $this->error("Expected range from value");
-		if ($this->tryConsumeTokenValue(TokenType::OPERATOR, '..')) {
+		if ($this->tryConsumeTokenValue(TokenType::OPERATOR, "..")) {
 			$exclusive = true;
-		} else if ($this->tryConsumeTokenValue(TokenType::OPERATOR, '..=')) {
+		} else if ($this->tryConsumeTokenValue(TokenType::OPERATOR, "..=")) {
 			$exclusive = false;
 		} else {
-			$this->error("Expected range operator `..` or `..=`"); // will throw
-			return null;
+			$this->error("Expected range operator '..' or '..='"); // will throw
+			// return null;
 		}
 		$to = $this->tryConsumeExpression() ?? $this->error("Expected range to value");
 		$this->consumeTokenOrError(TokenType::PAREN_CLOSE);
@@ -557,13 +557,13 @@ class Parser {
 		);
 		return $this->visitNodeOrNoOp(
 			(object) [
-				'node' => NodeType::STATEMENT_FOR_LOOP,
-				'identifier' => $identifier,
-				'exclusive' => $exclusive,
-				'from' => $from,
-				'to' => $to,
-				'statements' => $statements,
-				'line' => $tokenFor->line, 'col' => $tokenFor->col,
+				"node" => NodeType::STATEMENT_FOR_LOOP,
+				"identifier" => $identifier,
+				"exclusive" => $exclusive,
+				"from" => $from,
+				"to" => $to,
+				"statements" => $statements,
+				"line" => $tokenFor->line, "col" => $tokenFor->col,
 			]
 		);
 	}
@@ -584,9 +584,9 @@ class Parser {
 		$tokenIdentifier = $this->consumeTokenOrError(TokenType::IDENTIFIER);
 		$identifier = $this->visitNode(
 			(object) [
-				'node' => NodeType::IDENTIFIER,
-				'name' => $tokenIdentifier->value,
-				'line' => $tokenIdentifier->line, 'col' => $tokenIdentifier->col,
+				"node" => NodeType::IDENTIFIER,
+				"name" => $tokenIdentifier->value,
+				"line" => $tokenIdentifier->line, "col" => $tokenIdentifier->col,
 			]
 		);
 		if ($identifier === null || $identifier->node !== NodeType::IDENTIFIER) {
@@ -594,12 +594,12 @@ class Parser {
 		}
 		return $this->visitNodeOrNoOp(
 			(object) [
-				'node' => NodeType::DECLARATION_VARIABLE,
-				'identifier' => $identifier,
-				'mutable' => $mutable,
-				'type' => $type, // can be null
-				'line' => $firstToken->line ?? $type->line,
-				'col' => $firstToken->col ?? $type->col,
+				"node" => NodeType::DECLARATION_VARIABLE,
+				"identifier" => $identifier,
+				"mutable" => $mutable,
+				"type" => $type, // can be null
+				"line" => $firstToken->line ?? $type->line,
+				"col" => $firstToken->col ?? $type->col,
 			]
 		);
 	}
@@ -615,22 +615,22 @@ class Parser {
 		$tokenIdentifier = $this->consumeTokenOrError(TokenType::TYPE_NAME);
 		$identifier = $this->visitNode(
 			(object) [
-				'node' => NodeType::IDENTIFIER,
-				'name' => $tokenIdentifier->value,
-				'line' => $tokenIdentifier->line, 'col' => $tokenIdentifier->col,
+				"node" => NodeType::IDENTIFIER,
+				"name" => $tokenIdentifier->value,
+				"line" => $tokenIdentifier->line, "col" => $tokenIdentifier->col,
 			]
 		);
 		if ($identifier === null || $identifier->node !== NodeType::IDENTIFIER) {
 			throw new CompilerRuntimeException("Node type should be 'Identifier'");
 		}
-		$this->consumeTokenValueOrError(TokenType::OPERATOR, '=');
+		$this->consumeTokenValueOrError(TokenType::OPERATOR, "=");
 		$type = $this->tryConsumeTypeExpression() ?? $this->error('Expected type');
 		return $this->visitNodeOrNoOp(
 			(object) [
-				'node' => NodeType::DECLARATION_TYPE,
-				'identifier' => $identifier,
-				'type' => $type,
-				'line' => $tokenType->line, 'col' => $tokenType->col,
+				"node" => NodeType::DECLARATION_TYPE,
+				"identifier" => $identifier,
+				"type" => $type,
+				"line" => $tokenType->line, "col" => $tokenType->col,
 			]
 		);
 	}
@@ -646,29 +646,29 @@ class Parser {
 		if ($declaration->node !== NodeType::DECLARATION_VARIABLE) {
 			throw new CompilerRuntimeException("Node type should be 'VariableDeclaration'");
 		}
-		if ($this->tryConsumeTokenValue(TokenType::OPERATOR, '=')) {
+		if ($this->tryConsumeTokenValue(TokenType::OPERATOR, "=")) {
 			$value = $this->tryConsumeExpression() ?? $this->error("Expected expression #6");
 			$this->consumeTokenOrError(TokenType::SEMICOLON);
 			if ($declaration->type === null) {
 				$declaration = (object) [
-					'node' => NodeType::DECLARATION_VARIABLE,
-					'identifier' => $declaration->identifier,
-					'mutable' => $declaration->mutable,
-					'type' => (object) [
-						'node' => NodeType::TYPE_EXPRESSION,
-						'name' => Lang::TYPE_INFER,
-						'line' => $declaration->line, 'col' => $declaration->col,
+					"node" => NodeType::DECLARATION_VARIABLE,
+					"identifier" => $declaration->identifier,
+					"mutable" => $declaration->mutable,
+					"type" => (object) [
+						"node" => NodeType::TYPE_EXPRESSION,
+						"name" => Lang::TYPE_INFER,
+						"line" => $declaration->line, "col" => $declaration->col,
 					], // $this->inferType($value, $declaration),
-					'line' => $declaration->line, 'col' => $declaration->col,
+					"line" => $declaration->line, "col" => $declaration->col,
 				];
 			}
 			return $this->visitNodeOrNoOp(
 				(object) [
-					'node' => NodeType::EXPRESSION_ASSIGNMENT,
-					'operator' => '=',
-					'left' => $declaration,
-					'right' => $value,
-					'line' => $declaration->line, 'col' => $declaration->col,
+					"node" => NodeType::EXPRESSION_ASSIGNMENT,
+					"operator" => "=",
+					"left" => $declaration,
+					"right" => $value,
+					"line" => $declaration->line, "col" => $declaration->col,
 				]
 			);
 		}
@@ -728,9 +728,9 @@ class Parser {
 		$this->consumeTokenOrError(TokenType::SEMICOLON);
 		return $this->visitNodeOrNoOp(
 			(object) [
-				'node' => NodeType::STATEMENT_EXPRESSION,
-				'value' => $value,
-				'line' => $value->line, 'col' => $value->col,
+				"node" => NodeType::STATEMENT_EXPRESSION,
+				"value" => $value,
+				"line" => $value->line, "col" => $value->col,
 			]
 		);
 	}
@@ -746,13 +746,13 @@ class Parser {
 		$tokenOperator = $this->peekToken(1, TokenType::OPERATOR);
 		if (
 			$tokenOperator === null || (
-				$tokenOperator->value !== '=' &&
-				$tokenOperator->value !== '+=' &&
-				$tokenOperator->value !== '-=' &&
-				$tokenOperator->value !== '*=' &&
-				$tokenOperator->value !== '|=' &&
-				$tokenOperator->value !== '&=' &&
-				$tokenOperator->value !== '^='
+				$tokenOperator->value !== "=" &&
+				$tokenOperator->value !== "+=" &&
+				$tokenOperator->value !== "-=" &&
+				$tokenOperator->value !== "*=" &&
+				$tokenOperator->value !== "|=" &&
+				$tokenOperator->value !== "&=" &&
+				$tokenOperator->value !== "^="
 			)
 		) {
 			return null;
@@ -761,9 +761,9 @@ class Parser {
 		$value = $this->tryConsumeExpression() ?? $this->error("Expected expression #7");
 		$identifier = $this->visitNode(
 			(object) [
-				'node' => NodeType::IDENTIFIER,
-				'name' => $tokenIdentifier->value,
-				'line' => $tokenIdentifier->line, 'col' => $tokenIdentifier->col,
+				"node" => NodeType::IDENTIFIER,
+				"name" => $tokenIdentifier->value,
+				"line" => $tokenIdentifier->line, "col" => $tokenIdentifier->col,
 			]
 		);
 		if ($identifier === null || $identifier->node !== NodeType::IDENTIFIER) {
@@ -771,11 +771,11 @@ class Parser {
 		}
 		return $this->visitNode(
 			(object) [
-				'node' => NodeType::EXPRESSION_ASSIGNMENT,
-				'operator' => $tokenOperator->value,
-				'left' => $identifier,
-				'right' => $value,
-				'line' => $tokenIdentifier->line, 'col' => $tokenIdentifier->col,
+				"node" => NodeType::EXPRESSION_ASSIGNMENT,
+				"operator" => $tokenOperator->value,
+				"left" => $identifier,
+				"right" => $value,
+				"line" => $tokenIdentifier->line, "col" => $tokenIdentifier->col,
 			]
 		);
 	}
@@ -790,8 +790,8 @@ class Parser {
 		}
 		return $this->visitNodeOrNoOp(
 			(object) [
-				'node' => NodeType::STATEMENT_NOOP,
-				'line' => $token->line, 'col' => $token->col,
+				"node" => NodeType::STATEMENT_NOOP,
+				"line" => $token->line, "col" => $token->col,
 			]
 		);
 	}
@@ -861,8 +861,8 @@ class Parser {
 	 */
 	protected function visitNodeOrNoOp(object $node): ?object {
 		return $this->visitNode($node) ?? (object) [
-			'node' => NodeType::STATEMENT_NOOP,
-			'line' => $node->line, 'col' => $node->col,
+			"node" => NodeType::STATEMENT_NOOP,
+			"line" => $node->line, "col" => $node->col,
 		];
 	}
 
@@ -872,7 +872,7 @@ class Parser {
 	 * @param CompilerExtension[] $extensions
 	 * @return NodeProgram
 	 */
-	public function parse(array $tokens, string $fileName, $extensions): object {
+	public function parse(array $tokens, string $fileName, array $extensions): object {
 		$this->extensions = array_filter($extensions, function(CompilerExtension $extension) {
 			return $extension->transformMode & TransformMode::AST;
 		});
@@ -900,9 +900,9 @@ class Parser {
 		/** @var NodeProgram|null $nodeProgram */
 		$nodeProgram = $this->visitNodeRoot(
 			(object) [
-				'node' => NodeType::PROGRAM,
-				'statements' => $statements,
-				'line' => 1, 'col' => 1,
+				"node" => NodeType::PROGRAM,
+				"statements" => $statements,
+				"line" => 1, "col" => 1,
 			]
 		);
 		if ($nodeProgram === null || $nodeProgram->node !== NodeType::PROGRAM) {
@@ -913,9 +913,9 @@ class Parser {
 
 	protected function displayToken(Token $token): string {
 		if ($token->isKeyword()) {
-			$display = $this->keywordNames[$token->value] ?? 'UNKNOWN_KEYWORD';
+			$display = $this->keywordNames[$token->value] ?? "UNKNOWN_KEYWORD";
 		} else {
-			$display = Lang::$tokens[$token->token] ?? 'UNKNOWN_TOKEN';
+			$display = Lang::$tokens[$token->token] ?? "UNKNOWN_TOKEN";
 		}
 		if ($token->value !== null) {
 			$display .= ":`{$token->value}`";

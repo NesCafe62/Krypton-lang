@@ -221,7 +221,7 @@ class Tokenizer {
 	protected function tryConsumeIntLiteral(): ?Token {
 		$c = $this->peekUnchecked(1);
 		$length = 1;
-		if ($c === '-') {
+		if ($c === "-") {
 			if ($this->current + 2 >= $this->codeLength) {
 				return null;
 			}
@@ -247,7 +247,7 @@ class Tokenizer {
 
 	protected function tryConsumeStringLiteral(): ?Token {
 		$c = $this->peekUnchecked(1);
-		if ($c !== '"' && $c !== '`') {
+		if ($c !== "\"" && $c !== "`") {
 			return null;
 		}
 		$quoteType = $c;
@@ -281,7 +281,7 @@ class Tokenizer {
 	}
 
 	protected function tryConsumeComment(): bool {
-		if ($this->tryConsumeValue('//')) {
+		if ($this->tryConsumeValue("//")) {
 			$length = 0;
 			while ($this->current + $length < $this->codeLength) {
 				if ($this->peekUnchecked(1, $length) === self::NEW_LINE) {
@@ -293,7 +293,7 @@ class Tokenizer {
 			return true;
 		}
 
-		if ($this->tryConsumeValue('/*')) { // todo: nested comments
+		if ($this->tryConsumeValue("/*")) { // todo: nested comments
 			$length = 0;
 			while ($this->current + $length < $this->codeLength) {
 				$c = $this->peekUnchecked(1, $length);
@@ -301,7 +301,7 @@ class Tokenizer {
 					$this->newLine();
 				} else if (
 					$c === '*' &&
-					$this->peek(1, $length + 1) === '/'
+					$this->peek(1, $length + 1) === "/"
 				) {
 					$length += 2;
 					break;
@@ -401,10 +401,10 @@ class Tokenizer {
 
 		$char = $this->peekUnchecked(1);
 		$tokenType = null;
-		if ($char === '<') {
+		if ($char === "<") {
 			$this->typeParamNesting++;
 			$tokenType = TokenType::TYPE_PARAM_OPEN;
-		} else if ($char === '>') {
+		} else if ($char === ">") {
 			$this->typeParamNesting--;
 			if ($this->typeParamNesting < 0) {
 				[$line, $col] = $this->getLineAndCol();
@@ -417,9 +417,9 @@ class Tokenizer {
 				$this->typeDeclarationMode -= 2;
 			}
 			$tokenType = TokenType::TYPE_PARAM_CLOSE;
-		} else if ($char === ',') {
+		} else if ($char === ",") {
 			$tokenType = TokenType::COMMA;
-		} else if ($char === '=' && $this->typeDeclarationMode === self::TYPE_DECLARATION_TYPE_REGISTER) {
+		} else if ($char === "=" && $this->typeDeclarationMode === self::TYPE_DECLARATION_TYPE_REGISTER) {
 			if ($this->typeParamNesting !== 0) {
 				[$line, $col] = $this->getLineAndCol();
 				throw new CompilerException("{$this->fileName}:{$line}:{$col}: Expected '>'");
@@ -497,7 +497,7 @@ class Tokenizer {
 			$token = $this->tokens[$index];
 			if ($skipToParenOpen) {
 				if ($token->token === TokenType::PAREN_OPEN) {
-					if ($this->tokens[$index - 1]->isType(TokenType::OPERATOR, '>')) {
+					if ($this->tokens[$index - 1]->isType(TokenType::OPERATOR, ">")) {
 						$indexParenOpen = $index;
 						$skipToParenOpen = false;
 						$index--;
@@ -506,7 +506,7 @@ class Tokenizer {
 					}
 				}
 			} else {
-				if ($token->isType(TokenType::OPERATOR, '<')) {
+				if ($token->isType(TokenType::OPERATOR, "<")) {
 					if ($this->tokens[$index - 1]->token === TokenType::IDENTIFIER) {
 						$this->convertTokensToFunctionTypeParams($index, $indexParenOpen);
 						$this->convertFunctionArgumentsTypeDefinitions($indexParenOpen + 1, count($this->tokens) - 2);
@@ -536,10 +536,10 @@ class Tokenizer {
 		for ($index = $indexFrom; $index < $indexTo; $index++) {
 			$token = $this->tokens[$index];
 			if ($token->token === TokenType::OPERATOR) {
-				if ($token->value === '<') {
+				if ($token->value === "<") {
 					$token->token = TokenType::TYPE_PARAM_OPEN;
 					$token->value = null;
-				} else if ($token->value === '>') {
+				} else if ($token->value === ">") {
 					$token->token = TokenType::TYPE_PARAM_CLOSE;
 					$token->value = null;
 				}
@@ -561,13 +561,13 @@ class Tokenizer {
 		for ($index = $indexFrom; $index < $indexTo; $index++) {
 			$token = $this->tokens[$index];
 			if ($token->token === TokenType::OPERATOR) {
-				if ($token->value === '<') {
+				if ($token->value === "<") {
 					$token->token = TokenType::TYPE_PARAM_OPEN;
 					$token->value = null;
-				} else if ($token->value === '>') {
+				} else if ($token->value === ">") {
 					$token->token = TokenType::TYPE_PARAM_CLOSE;
 					$token->value = null;
-				} else if ($token->value === '>>') {
+				} else if ($token->value === ">>") {
 					$token->token = TokenType::TYPE_PARAM_CLOSE;
 					$token->value = null;
 					$this->insertTokenAfter(
@@ -609,7 +609,7 @@ class Tokenizer {
 				}
 			} else if (
 				$token->token === TokenType::TYPE_PARAM_OPEN ||
-				$token->isType(TokenType::OPERATOR, '<')
+				$token->isType(TokenType::OPERATOR, "<")
 			) {
 				$typeParamNesting--;
 				if ($token->token === TokenType::OPERATOR) {
@@ -630,13 +630,13 @@ class Tokenizer {
 				}
 			} else if (
 				$token->token === TokenType::TYPE_PARAM_CLOSE ||
-				$token->isType(TokenType::OPERATOR, '>')
+				$token->isType(TokenType::OPERATOR, ">")
 			) {
 				$typeParamNesting++;
 				if ($token->token === TokenType::OPERATOR) {
 					$needConvertTokens = true;
 				}
-			} else if ($token->isType(TokenType::OPERATOR, '>>')) {
+			} else if ($token->isType(TokenType::OPERATOR, ">>")) {
 				$typeParamNesting += 2;
 				$needConvertTokens = true;
 			} else if ($token->token === TokenType::TYPE_NAME) {
@@ -659,13 +659,13 @@ class Tokenizer {
 		for ($index = $indexFrom; $index < $indexTo; $index++) {
 			$token = $this->tokens[$index];
 			if ($token->token === TokenType::OPERATOR) {
-				if ($token->value === '<') {
+				if ($token->value === "<") {
 					$token->token = TokenType::TYPE_PARAM_OPEN;
 					$token->value = null;
-				} else if ($token->value === '>') {
+				} else if ($token->value === ">") {
 					$token->token = TokenType::TYPE_PARAM_CLOSE;
 					$token->value = null;
-				} else if ($token->value === '>>') {
+				} else if ($token->value === ">>") {
 					$token->token = TokenType::TYPE_PARAM_CLOSE;
 					$token->value = null;
 					$this->insertTokenAfter(
@@ -725,7 +725,7 @@ class Tokenizer {
 			$this->tokens[] = $token;
 			if (
 				$token->token === TokenType::OPERATOR &&
-				($token->value === '>' || $token->value === '>>')
+				($token->value === ">" || $token->value === ">>")
 			) {
 				$this->checkTypeDefinition(count($this->tokens));
 			}

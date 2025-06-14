@@ -31,53 +31,57 @@ class Lang {
 	public const ASSOC_RIGHT = 1;
 
 	public static $keywords = [
-		'ret' => TokenType::KEYWORD_RET,
-		'func' => TokenType::KEYWORD_FUNC,
-		'if' => TokenType::KEYWORD_IF,
-		'else' => TokenType::KEYWORD_ELSE,
-		'for' => TokenType::KEYWORD_FOR,
-		'in' => TokenType::KEYWORD_IN,
-		'do' => TokenType::KEYWORD_DO,
-		'while' => TokenType::KEYWORD_WHILE,
-		'switch' => TokenType::KEYWORD_SWITCH,
-		'case' => TokenType::KEYWORD_CASE,
-		'break' => TokenType::KEYWORD_BREAK,
-		'continue' => TokenType::KEYWORD_CONTINUE,
+		"ret" => TokenType::KEYWORD_RET,
+		"func" => TokenType::KEYWORD_FUNC,
+		"if" => TokenType::KEYWORD_IF,
+		"else" => TokenType::KEYWORD_ELSE,
+		"for" => TokenType::KEYWORD_FOR,
+		"in" => TokenType::KEYWORD_IN,
+		"while" => TokenType::KEYWORD_WHILE,
+		"repeat" => TokenType::KEYWORD_REPEAT,
+		"switch" => TokenType::KEYWORD_SWITCH,
+		"case" => TokenType::KEYWORD_CASE,
+		"break" => TokenType::KEYWORD_BREAK,
+		"continue" => TokenType::KEYWORD_CONTINUE,
+		// match
 
-		'true' => TokenType::KEYWORD_TRUE,
-		'false' => TokenType::KEYWORD_FALSE,
-		'null' => TokenType::KEYWORD_NULL,
+		"true" => TokenType::KEYWORD_TRUE,
+		"false" => TokenType::KEYWORD_FALSE,
+		"null" => TokenType::KEYWORD_NULL,
 
-		'class' => TokenType::KEYWORD_CLASS,
-		'interface' => TokenType::KEYWORD_INTERFACE,
-		'enum' => TokenType::KEYWORD_ENUM,
-		'type' => TokenType::KEYWORD_TYPE,
+		// struct
+		"class" => TokenType::KEYWORD_CLASS,
+		"interface" => TokenType::KEYWORD_INTERFACE,
+		"enum" => TokenType::KEYWORD_ENUM,
+		"type" => TokenType::KEYWORD_TYPE,
+		// module
+		// namespace
 
-		'pub' => TokenType::KEYWORD_PUB,
-		'inline' => TokenType::KEYWORD_INLINE,
+		"pub" => TokenType::KEYWORD_PUB,
+		"inline" => TokenType::KEYWORD_INLINE,
 
-		'struct' => TokenType::KEYWORD_STRUCT,
-		'extends' => TokenType::KEYWORD_EXTENDS,
-		'implements' => TokenType::KEYWORD_IMPLEMENTS,
-		'instanceof' => TokenType::KEYWORD_INSTANCEOF,
-		'this' => TokenType::KEYWORD_THIS,
-		'new' => TokenType::KEYWORD_NEW,
+		"struct" => TokenType::KEYWORD_STRUCT,
+		"extends" => TokenType::KEYWORD_EXTENDS,
+		"implements" => TokenType::KEYWORD_IMPLEMENTS,
+		"instanceof" => TokenType::KEYWORD_INSTANCEOF,
+		"this" => TokenType::KEYWORD_THIS,
+		"new" => TokenType::KEYWORD_NEW,
 
-		'try' => TokenType::KEYWORD_TRY,
-		'catch' => TokenType::KEYWORD_CATCH,
-		'throw' => TokenType::KEYWORD_THROW,
+		"try" => TokenType::KEYWORD_TRY,
+		"catch" => TokenType::KEYWORD_CATCH,
+		"throw" => TokenType::KEYWORD_THROW,
 
-		'mut' => TokenType::KEYWORD_MUT,
-		'ref' => TokenType::KEYWORD_REF,
-		'let' => TokenType::KEYWORD_LET,
+		"mut" => TokenType::KEYWORD_MUT,
+		"ref" => TokenType::KEYWORD_REF,
+		"let" => TokenType::KEYWORD_LET,
 
-		'use' => TokenType::KEYWORD_USE,
-		'operator' => TokenType::KEYWORD_OPERATOR,
-		'as' => TokenType::KEYWORD_AS,
+		"use" => TokenType::KEYWORD_USE,
+		"operator" => TokenType::KEYWORD_OPERATOR,
+		"as" => TokenType::KEYWORD_AS,
 
-		'import' => TokenType::KEYWORD_IMPORT,
-		'export' => TokenType::KEYWORD_EXPORT,
-		'from' => TokenType::KEYWORD_FROM,
+		"import" => TokenType::KEYWORD_IMPORT,
+		"export" => TokenType::KEYWORD_EXPORT,
+		"from" => TokenType::KEYWORD_FROM,
 	];
 
 	public static $typeDeclarationKeywords = [
@@ -87,7 +91,7 @@ class Lang {
 		TokenType::KEYWORD_TYPE => true,
 	];
 
-	public const TYPE_INFER = 'Infer';
+	public const TYPE_INFER = "Infer";
 
 
 	// alias  | namespace | asmType | size  | internalType
@@ -106,45 +110,45 @@ class Lang {
 
 	public static $types = [
 		// typeName => namespace
-		'int8' => 'Int8',
-		'int16' => 'Int16',
-		'int32' => 'Int32',
-		'int64' => 'Int64',
+		"int8" => "Int8",
+		"int16" => "Int16",
+		"int32" => "Int32",
+		"int64" => "Int64",
 
-		'uint8' => 'UInt8',
-		'uint16' => 'UInt16',
-		'uint32' => 'UInt32',
-		'uint64' => 'UInt64',
+		"uint8" => "UInt8",
+		"uint16" => "UInt16",
+		"uint32" => "UInt32",
+		"uint64" => "UInt64",
 
-		'float32' => 'Float32',
-		'float64' => 'Float64',
+		"float32" => "Float32",
+		"float64" => "Float64",
 
-		'byte' => 'UInt8',
-		'int' => 'Int32',
-		'uint' => 'UInt32',
-		// 'long' => 'Int64',
-		// 'ulong' => 'UInt64',
-		'float' => 'Float32',
-		'char' => 'Int32', // or UInt8 ?
+		"byte" => "UInt8",
+		"int" => "Int32",
+		"uint" => "UInt32",
+		// "long" => "Int64",
+		// "ulong" => "UInt64",
+		"float" => "Float32",
+		"char" => "Int32", // or UInt8 ?
 
 
-		'bool' => 'Bool',
+		"bool" => "Bool",
 
-		'void' => null,
+		"void" => null,
 
-		'Array' => 'Array',
-		'List' => 'List',
-		// 'object' => 'Object',
-		// 'Map' => 'Map',
-		// 'WeakMap' => 'WeakMap',
-		// 'Set' => 'Set',
-		// 'Ref' => 'Ref',
-		// 'Opt' => 'Opt',
-		// 'Fn' => 'Fn',
-		// 'Tuple' => null,
-		// 'Enumerable' => 'Enumerable',
+		"Array" => "Array",
+		"List" => "List",
+		// "object" => "Object",
+		// "Map" => "Map",
+		// "WeakMap" => "WeakMap",
+		// "Set" => "Set",
+		// "Ref" => "Ref",
+		// "Opt" => "Opt",
+		// "Func" => "Func",
+		// "Tuple" => null,
+		// "Enumerable" => "Enumerable",
 
-		// 'decimal' => 'Decimal',
+		// "decimal" => "Decimal",
 	];
 
 	/* public static $_types = [
@@ -176,74 +180,74 @@ class Lang {
 	public static $operators = [
 		// op => [precedence, assoc]
 
-		'..=' => [5 /* ? */, self::ASSOC_LEFT], // range inclusive
-		'..' => [5 /* ? */, self::ASSOC_LEFT], // range exclusive
-		// '**' => [13],
-		// '|>' => [_],
-		// '??' => [2],
-		// '?.' => [17],
-		// '?:' => [2],
+		"..=" => [5 /* ? */, self::ASSOC_LEFT], // range inclusive
+		".." => [5 /* ? */, self::ASSOC_LEFT], // range exclusive
+		// "**" => [13],
+		// "|>" => [_],
+		// "??" => [2],
+		// "?." => [17],
+		// "?:" => [2],
 
-		'+=' => [1, self::ASSOC_LEFT],
-		'-=' => [1, self::ASSOC_LEFT],
-		'*=' => [1, self::ASSOC_LEFT],
-		// '/=' => [1],
-		// '%=' => [1],
-		'|=' => [1, self::ASSOC_LEFT],
-		'&=' => [1, self::ASSOC_LEFT],
-		'^=' => [1, self::ASSOC_LEFT],
-		/* '**=' => [1],
-		'>>=' => [1],
-		'<<=' => [1],
-		'&&=' => [1],
-		'||=' => [1],
-		'??=' => [1],
+		"+=" => [1, self::ASSOC_LEFT],
+		"-=" => [1, self::ASSOC_LEFT],
+		"*=" => [1, self::ASSOC_LEFT],
+		// "/=" => [1],
+		// "%=" => [1],
+		"|=" => [1, self::ASSOC_LEFT],
+		"&=" => [1, self::ASSOC_LEFT],
+		"^=" => [1, self::ASSOC_LEFT],
+		/* "**=" => [1],
+		">>=" => [1],
+		"<<=" => [1],
+		"&&=" => [1],
+		"||=" => [1],
+		"??=" => [1],
 
-		// unary right '++' => [15],
-		// unary right '--' => [15],
+		// unary right "++" => [15],
+		// unary right "--" => [15],
 
-		// 'new' => [16]
-		// fn call '()' => [17]
+		// "new" => [16]
+		// fn call "()" => [17]
 
-		// unary left '+' => [14],
-		// unary left '-' => [14], */
-		'++' => [14, self::ASSOC_LEFT],
-		'--' => [14, self::ASSOC_LEFT],
+		// unary left "+" => [14],
+		// unary left "-" => [14], */
+		"++" => [14, self::ASSOC_LEFT],
+		"--" => [14, self::ASSOC_LEFT],
 
-		'+' => [11, self::ASSOC_LEFT],
-		'-' => [11, self::ASSOC_LEFT],
-		'*' => [12, self::ASSOC_LEFT],
-		'/' => [12, self::ASSOC_LEFT],
-		'%' => [12, self::ASSOC_LEFT],
+		"+" => [11, self::ASSOC_LEFT],
+		"-" => [11, self::ASSOC_LEFT],
+		"*" => [12, self::ASSOC_LEFT],
+		"/" => [12, self::ASSOC_LEFT],
+		"%" => [12, self::ASSOC_LEFT],
 
-		// '&&' => [4],
-		// '||' => [3],
+		"&&" => [4, self::ASSOC_LEFT],
+		"||" => [3, self::ASSOC_LEFT],
 
-		'|' => [7, self::ASSOC_LEFT], // 5 in JS
-		'^' => [8, self::ASSOC_LEFT], // 6 in JS
-		'&' => [9, self::ASSOC_LEFT], // 7 in JS
-		'>>' => [10, self::ASSOC_LEFT],
-		'<<' => [10, self::ASSOC_LEFT],
+		"|" => [7, self::ASSOC_LEFT], // 5 in JS
+		"^" => [8, self::ASSOC_LEFT], // 6 in JS
+		"&" => [9, self::ASSOC_LEFT], // 7 in JS
+		">>" => [10, self::ASSOC_LEFT],
+		"<<" => [10, self::ASSOC_LEFT],
 
-		// 'instanceof' => [9] // 6
-		// 'typeof' => [14]
-		// '( )' => [18]
+		// "instanceof" => [9] // 6
+		// "typeof" => [14]
+		// "( )" => [18]
 
-		'==' => [5, self::ASSOC_LEFT], // 8 in JS
-		'!=' => [5, self::ASSOC_LEFT], // 8 in JS
-		'<=' => [6, self::ASSOC_LEFT], // 9 in JS
-		'>=' => [6, self::ASSOC_LEFT], // 9 in JS
-		'>' => [6, self::ASSOC_LEFT], // 9 in JS
-		'<' => [6, self::ASSOC_LEFT], // 9 in JS
+		"==" => [5, self::ASSOC_LEFT], // 8 in JS
+		"!=" => [5, self::ASSOC_LEFT], // 8 in JS
+		"<=" => [6, self::ASSOC_LEFT], // 9 in JS
+		">=" => [6, self::ASSOC_LEFT], // 9 in JS
+		">" => [6, self::ASSOC_LEFT], // 9 in JS
+		"<" => [6, self::ASSOC_LEFT], // 9 in JS
 
 		// unary
-		'!' => [14, self::ASSOC_LEFT],
-		'~' => [6, self::ASSOC_LEFT], // 9 in JS
+		"!" => [14, self::ASSOC_LEFT],
+		"~" => [6, self::ASSOC_LEFT], // 9 in JS
 
-		'.' => [17, self::ASSOC_LEFT],
-		// '::' => [17],
-		// '=>' => [_], // return alias
-		'=' => [1, self::ASSOC_LEFT],
+		"." => [17, self::ASSOC_LEFT],
+		// "::" => [17],
+		// "=>" => [_], // return alias
+		"=" => [1, self::ASSOC_LEFT],
 	];
 
 	public static $controlTokens = [
@@ -260,92 +264,144 @@ class Lang {
 	];
 
 	public static $tokens = [
-		TokenType::SEMICOLON => ';',
-		TokenType::COMMA => ',',
-		TokenType::COLON => ':',
-		TokenType::QUESTION => '?',
-		TokenType::CURLY_OPEN => '{',
-		TokenType::CURLY_CLOSE => '}',
-		TokenType::PAREN_OPEN => '(',
-		TokenType::PAREN_CLOSE => ')',
-		TokenType::SQUARE_OPEN => '[',
-		TokenType::SQUARE_CLOSE => ']',
+		TokenType::SEMICOLON => ";",
+		TokenType::COMMA => ",",
+		TokenType::COLON => ":",
+		TokenType::QUESTION => "?",
+		TokenType::CURLY_OPEN => "{",
+		TokenType::CURLY_CLOSE => "}",
+		TokenType::PAREN_OPEN => "(",
+		TokenType::PAREN_CLOSE => ")",
+		TokenType::SQUARE_OPEN => "[",
+		TokenType::SQUARE_CLOSE => "]",
 
-		TokenType::TYPE_PARAM_OPEN => 'TYPE_PARAM_OPEN',
-		TokenType::TYPE_PARAM_CLOSE => 'TYPE_PARAM_CLOSE',
+		TokenType::TYPE_PARAM_OPEN => "TYPE_PARAM_OPEN",
+		TokenType::TYPE_PARAM_CLOSE => "TYPE_PARAM_CLOSE",
 
-		// TokenType::KEYWORD => 'KEYWORD',
-		TokenType::IDENTIFIER => 'IDENTIFIER',
-		TokenType::TYPE_NAME => 'TYPE_NAME',
-		TokenType::INT => 'INT',
-		TokenType::STRING => 'STRING',
-		// TokenType::CHAR => 'CHAR',
-		// TokenType::FLOAT => 'FLOAT',
-		// TokenType::DOUBLE => 'DOUBLE',
-		TokenType::OPERATOR => 'OPERATOR',
+		// TokenType::KEYWORD => "KEYWORD",
+		TokenType::IDENTIFIER => "IDENTIFIER",
+		TokenType::TYPE_NAME => "TYPE_NAME",
+		TokenType::INT => "INT",
+		TokenType::STRING => "STRING",
+		// TokenType::CHAR => "CHAR",
+		// TokenType::FLOAT => "FLOAT",
+		// TokenType::DOUBLE => "DOUBLE",
+		TokenType::OPERATOR => "OPERATOR",
+		
+		
+		TokenType::KEYWORD_RET => "KEYWORD_RET",
+		TokenType::KEYWORD_FUNC => "KEYWORD_FUNC",
+		TokenType::KEYWORD_IF => "KEYWORD_IF",
+		TokenType::KEYWORD_ELSE => "KEYWORD_ELSE",
+		TokenType::KEYWORD_FOR => "KEYWORD_FOR",
+		TokenType::KEYWORD_IN => "KEYWORD_IN",
+		TokenType::KEYWORD_WHILE => "KEYWORD_WHILE",
+		TokenType::KEYWORD_REPEAT => "KEYWORD_REPEAT",
+		TokenType::KEYWORD_SWITCH => "KEYWORD_SWITCH",
+		TokenType::KEYWORD_CASE => "KEYWORD_CASE",
+		TokenType::KEYWORD_BREAK => "KEYWORD_BREAK",
+		TokenType::KEYWORD_CONTINUE => "KEYWORD_CONTINUE",
+	
+		TokenType::KEYWORD_TRUE => "KEYWORD_TRUE",
+		TokenType::KEYWORD_FALSE => "KEYWORD_FALSE",
+		TokenType::KEYWORD_NULL => "KEYWORD_NULL",
+	
+		TokenType::KEYWORD_CLASS => "KEYWORD_CLASS",
+		TokenType::KEYWORD_INTERFACE => "KEYWORD_INTERFACE",
+		TokenType::KEYWORD_ENUM => "KEYWORD_ENUM",
+		TokenType::KEYWORD_TYPE => "KEYWORD_TYPE",
+	
+		TokenType::KEYWORD_PUB => "KEYWORD_PUB",
+		TokenType::KEYWORD_INLINE => "KEYWORD_INLINE",
+	
+		TokenType::KEYWORD_STRUCT => "KEYWORD_STRUCT",
+		TokenType::KEYWORD_EXTENDS => "KEYWORD_EXTENDS",
+		TokenType::KEYWORD_IMPLEMENTS => "KEYWORD_IMPLEMENTS",
+		TokenType::KEYWORD_INSTANCEOF => "KEYWORD_INSTANCEOF",
+		TokenType::KEYWORD_THIS => "KEYWORD_THIS",
+		TokenType::KEYWORD_NEW => "KEYWORD_NEW",
+	
+		TokenType::KEYWORD_TRY => "KEYWORD_TRY",
+		TokenType::KEYWORD_CATCH => "KEYWORD_CATCH",
+		TokenType::KEYWORD_THROW => "KEYWORD_THROW",
+	
+		TokenType::KEYWORD_MUT => "KEYWORD_MUT",
+		TokenType::KEYWORD_REF => "KEYWORD_REF",
+		TokenType::KEYWORD_LET => "KEYWORD_LET",
+	
+		TokenType::KEYWORD_USE => "KEYWORD_USE",
+		TokenType::KEYWORD_OPERATOR => "KEYWORD_OPERATOR",
+		TokenType::KEYWORD_AS => "KEYWORD_AS",
+	
+		TokenType::KEYWORD_IMPORT => "KEYWORD_IMPORT",
+		TokenType::KEYWORD_EXPORT => "KEYWORD_EXPORT",
+		TokenType::KEYWORD_FROM => "KEYWORD_FROM",
 	];
 
 	public static $nodes = [
-		NodeType::PROGRAM => 'Program',
+		NodeType::PROGRAM => "Program",
 
-		NodeType::STATEMENT_NOOP => 'NoOpStatement',
-		NodeType::STATEMENT_RETURN => 'ReturnStatement',
-		NodeType::STATEMENT_IF => 'IfStatement',
-		NodeType::STATEMENT_ELSE_IF => 'ElseIfStatement',
-		NodeType::STATEMENT_EXPRESSION => 'ExpressionStatement',
-		// NodeType::STATEMENT_SWITCH => 'SwitchStatement',
-		NodeType::STATEMENT_FOR_LOOP => 'ForLoopStatement',
-		NodeType::STATEMENT_WHILE_LOOP => 'WhileLoopStatement',
-		// NodeType::STATEMENT_DO_WHILE_LOOP => 'DoWhileLoopStatement',
-		// NodeType::STATEMENT_USE => 'UseStatement',
-		NodeType::STATEMENT_SCOPE => 'ScopeStatement',
+		NodeType::STATEMENT_NOOP => "NoOpStatement",
+		NodeType::STATEMENT_RETURN => "ReturnStatement",
+		NodeType::STATEMENT_IF => "IfStatement",
+		NodeType::STATEMENT_ELSE_IF => "ElseIfStatement",
+		NodeType::STATEMENT_EXPRESSION => "ExpressionStatement",
+		// NodeType::STATEMENT_SWITCH => "SwitchStatement",
+		NodeType::STATEMENT_FOR_LOOP => "ForLoopStatement",
+		NodeType::STATEMENT_WHILE_LOOP => "WhileLoopStatement",
+		// NodeType::STATEMENT_REPEAT_WHILE_LOOP => "RepeatWhileLoopStatement",
+		// NodeType::STATEMENT_USE => "UseStatement",
+		NodeType::STATEMENT_SCOPE => "ScopeStatement",
 
-		NodeType::DECLARATION_VARIABLE => 'VariableDeclaration',
-		NodeType::DECLARATION_FUNCTION => 'FunctionDeclaration',
-		// NodeType::DECLARATION_OPERATOR => 'OperatorDeclaration',
-		// NodeType::DECLARATION_CLASS => 'ClassDeclaration',
-		// NodeType::DECLARATION_INTERFACE => 'InterfaceDeclaration',
-		NodeType::DECLARATION_TYPE => 'TypeDeclaration',
+		NodeType::DECLARATION_VARIABLE => "VariableDeclaration",
+		NodeType::DECLARATION_FUNCTION => "FunctionDeclaration",
+		// NodeType::DECLARATION_OPERATOR => "OperatorDeclaration",
+		// NodeType::DECLARATION_CLASS => "ClassDeclaration",
+		// NodeType::DECLARATION_INTERFACE => "InterfaceDeclaration",
+		NodeType::DECLARATION_TYPE => "TypeDeclaration",
 
-		NodeType::DEFINITION_ARGUMENT => 'ArgumentDefinition',
-		// NodeType::DEFINITION_LAMBDA => 'LambdaDefinition',
-		// NodeType::DEFINITION_PROPERTY => 'PropertyDefinition',
+		NodeType::DEFINITION_ARGUMENT => "ArgumentDefinition",
+		// NodeType::DEFINITION_LAMBDA => "LambdaDefinition",
+		// NodeType::DEFINITION_PROPERTY => "PropertyDefinition",
 
-		NodeType::CALL_FUNCTION => 'FunctionCall',
-		// NodeType::CALL_CONSTRUCTOR => 'ConstructorCall',
+		NodeType::CALL_FUNCTION => "FunctionCall",
+		// NodeType::CALL_CONSTRUCTOR => "ConstructorCall",
 
-		NodeType::EXPRESSION_UNARY => 'UnaryExpression',
-		// NodeType::EXPRESSION_UNARY_RIGHT => 'UnaryExpressionRight',
-		NodeType::EXPRESSION_BINARY => 'BinaryExpression',
-		NodeType::EXPRESSION_ASSIGNMENT => 'AssignmentExpression',
-		NodeType::EXPRESSION_UPDATE => 'UpdateExpression',
-		// NodeType::OPERATOR_PROPERTY => 'OperatorProperty',
-		// NodeType::OPERATOR_INDEX => 'OperatorIndex',
+		NodeType::EXPRESSION_UNARY => "UnaryExpression",
+		// NodeType::EXPRESSION_UNARY_RIGHT => "UnaryExpressionRight",
+		NodeType::EXPRESSION_BINARY => "BinaryExpression",
+		NodeType::EXPRESSION_ASSIGNMENT => "AssignmentExpression",
+		NodeType::EXPRESSION_UPDATE => "UpdateExpression",
+		// NodeType::OPERATOR_PROPERTY => "OperatorProperty",
+		// NodeType::OPERATOR_INDEX => "OperatorIndex",
 
-		// NodeType::TYPE_CAST => 'TypeCast',
-		NodeType::IDENTIFIER => 'Identifier',
+		// NodeType::TYPE_CAST => "TypeCast",
+		NodeType::IDENTIFIER => "Identifier",
 
-		NodeType::LITERAL_INT => 'LiteralInt',
-		NodeType::LITERAL_STRING => 'LiteralString',
-		NodeType::LITERAL_BOOL => 'LiteralBool',
-		NodeType::LITERAL_NULL => 'LiteralNull',
+		NodeType::LITERAL_INT => "LiteralInt",
+		NodeType::LITERAL_STRING => "LiteralString",
+		NodeType::LITERAL_BOOL => "LiteralBool",
+		NodeType::LITERAL_NULL => "LiteralNull",
 
-		// NodeType::EXPRESSION => 'Expression',
-		NodeType::TYPE_EXPRESSION => 'TypeExpression',
-		// NodeType::TYPES_LIST => 'TypesList',
+		// NodeType::EXPRESSION => "Expression",
+		NodeType::TYPE_EXPRESSION => "TypeExpression",
+		// NodeType::TYPES_LIST => "TypesList",
 
 
-		NodeType::STATEMENT_IO_PRINT => 'IOPrintStatement', // todo: temporary io.print
+		NodeType::STATEMENT_IO_PRINT => "IOPrintStatement", // todo: temporary io.print
 	];
 
 	public static function isControlToken(int $tokenType): bool {
 		return isset(self::$controlTokens[$tokenType]);
 	}
 
-	public static function displayToken(int $tokenType): string {
-		$display = self::$tokens[$tokenType] ?? 'UNKNOWN_TOKEN';
+	public static function displayToken(int $tokenType, ?string $value = null): string {
+		$display = self::$tokens[$tokenType] ?? "UNKNOWN_TOKEN[{$tokenType}]";
 		if (isset(self::$controlTokens[$tokenType])) {
 			return "`{$display}`";
+		}
+		if ($value !== null) {
+			return "{$display}:`{$value}`";
 		}
 		return $display;
 	}
@@ -372,7 +428,7 @@ class Lang {
 	 */
 	public static function displayNode(object $node, int $indentLevel = 0): string {
 		$nodeType = self::getNodeTypeName($node);
-		$offset = str_repeat('    ', $indentLevel);
+		$offset = str_repeat("    ", $indentLevel);
 		switch ($node->node) {
 			case NodeType::PROGRAM:
 			case NodeType::STATEMENT_SCOPE:

@@ -8,7 +8,7 @@ class GeneratorFasm_win_x86_64 implements GeneratorInterface {
 	/** @var int */
 	protected $scopeNesting;
 
-	/** @var array */
+	/** @var IdentifierData[] */
 	protected $identifiers;
 
 	/** @var array */
@@ -263,9 +263,9 @@ class GeneratorFasm_win_x86_64 implements GeneratorInterface {
 
 	/**
 	 * @param string $instruction
-	 * @param Allocation|null $arg1
-	 * @param Allocation|null $arg2
-	 * @param Allocation|null $arg3
+	 * @param Allocation|object|null $arg1
+	 * @param Allocation|object|null $arg2
+	 * @param Allocation|object|null $arg3
 	 */
 	protected function emit(string $instruction, $arg1 = null, $arg2 = null, $arg3 = null): void {
 		$arg1Value = 0; $arg1Type = self::ARG_NONE;
@@ -452,8 +452,15 @@ class GeneratorFasm_win_x86_64 implements GeneratorInterface {
 		return self::REGISTER_NONE;
 	}
 
-	protected function deallocateRegister(int $regIndex): void {
+	protected function deallocateRegisterByIndex(int $regIndex): void {
 		$this->allocated[$regIndex] = null;
+	}
+	
+	/**
+	 * @param Allocation|object $alloc
+	 */
+	protected function deallocateRegister(object $alloc): void {
+		$this->allocated[$alloc->value] = null;
 	}
 
 	/**
@@ -524,9 +531,9 @@ class GeneratorFasm_win_x86_64 implements GeneratorInterface {
 	 * @param Allocation|object $alloc
 	 * @return Allocation
 	 */
-	protected function allocateFreeRegisterWithDeallocationFrom(object $alloc): object {
+	protected function allocateFreeRegisterWithDeallocationFromRegister(object $alloc): object {
 		$allocRes = $this->allocateFreeRegister($alloc->size);
-		$this->deallocateIfRegister($alloc);
+		$this->deallocateRegister($alloc);
 		$this->emit('mov', $allocRes, $alloc);
 		return $allocRes;
 	}
@@ -552,15 +559,15 @@ class GeneratorFasm_win_x86_64 implements GeneratorInterface {
 	}
 
 	/**
-	 * @param int $regSize
+	 * @param int $size
 	 * @return Allocation
 	 */
-	protected function allocateStack(int $regSize): object {
-		$this->stackPos++;
+	protected function allocateStack(int $size): object {
+		$this->stackPos++; // todo: size
 		return (object) [
 			'type' => self::ALLOCATION_STACK,
 			'value' => $this->stackPos,
-			'size' => $regSize,
+			'size' => $size,
 		];
 	}
 
@@ -600,6 +607,18 @@ class GeneratorFasm_win_x86_64 implements GeneratorInterface {
 			'size' => $alloc->size,
 		];
 		$this->emit('mov', $allocLeft, $alloc);
+	}
+
+	/**
+	 * @param int $value
+	 * @return Allocation
+	 */
+	protected function createImmediate(int $value): object {
+		return (object) [
+			'type' => self::ALLOCATION_IMMEDIATE,
+			'value' => $value,
+			'size' => self::SIZE_32,
+		];
 	}
 
 	/**
@@ -688,7 +707,7 @@ class GeneratorFasm_win_x86_64 implements GeneratorInterface {
 			$allocLeft->type === self::ALLOCATION_STACK || // and right is not stack
 			$allocLeft->type === self::ALLOCATION_IMMEDIATE // and right is not immediate
 		) { */
-		// $this->deallocateRegister($allocLeft); is never a register
+		// no need to deallocate $allocLeft because it's not a register
 		$allocRes = $this->allocateFreeRegister($allocLeft->size); // todo: size, prob max($allocLeft->size, $allocRight->size)
 		$this->emit('imul', $allocRes, $allocLeft, $allocRight);
 		return $allocRes;
@@ -777,8 +796,8 @@ class GeneratorFasm_win_x86_64 implements GeneratorInterface {
 		$this->emit('idiv', $allocRight);
 
 		// unlock reserved registers or deallocate registers used for operands
-		$this->deallocateRegister(self::REGISTER_A);
-		$this->deallocateRegister(self::REGISTER_D);
+		$this->deallocateRegisterByIndex(self::REGISTER_A);
+		$this->deallocateRegisterByIndex(self::REGISTER_D);
 
 		$allocRes = $isOperatorReminder
 			? $this->allocateRegister(self::REGISTER_D, self::SIZE_32)
@@ -789,7 +808,7 @@ class GeneratorFasm_win_x86_64 implements GeneratorInterface {
 			$tempD->type === self::ALLOCATION_STACK
 		) {
 			if ($allocRes->value === self::REGISTER_D) {
-				$allocRes = $this->allocateFreeRegisterWithDeallocationFrom($allocRes);
+				$allocRes = $this->allocateFreeRegisterWithDeallocationFromRegister($allocRes);
 			}
 			$this->popRegister($tempD, self::REGISTER_D);
 		}
@@ -799,7 +818,7 @@ class GeneratorFasm_win_x86_64 implements GeneratorInterface {
 			$tempA->type === self::ALLOCATION_STACK
 		) {
 			if ($allocRes->value === self::REGISTER_A) {
-				$allocRes = $this->allocateFreeRegisterWithDeallocationFrom($allocRes);
+				$allocRes = $this->allocateFreeRegisterWithDeallocationFromRegister($allocRes);
 			}
 			$this->popRegister($tempA, self::REGISTER_A);
 		}
@@ -868,12 +887,7 @@ class GeneratorFasm_win_x86_64 implements GeneratorInterface {
 		} else if ($operator === '>') {
 			$this->emit('setg', $allocLeftU8);
 		}
-		$one = (object) [
-			'type' => self::ALLOCATION_IMMEDIATE,
-			'value' => 1,
-			'size' => 0,
-		];
-		$this->emit('and', $allocLeftU8, $one);
+		$this->emit('and', $allocLeftU8, $this->createImmediate(1));
 		$this->emit('movzx', $allocLeft, $allocLeftU8);
 		return $allocLeft; // todo: consider size
 	}
@@ -938,13 +952,12 @@ class GeneratorFasm_win_x86_64 implements GeneratorInterface {
 		} */
 
 
-		$this->deallocateIfRegister($allocRight);
-
 		if ($node->operator === '<<') {
 			if ($allocRight->type !== self::ALLOCATION_REGISTER) {
 				$allocRight = $this->allocateFreeRegisterFrom($allocRight, true);
 				// prev $allocRight doesn't need deallocation because it's not a register
 			}
+			$this->deallocateRegister($allocRight);
 			$allocRightU8 = (object) [
 				'type' => self::ALLOCATION_REGISTER,
 				'value' => $allocRight->value,
@@ -958,6 +971,7 @@ class GeneratorFasm_win_x86_64 implements GeneratorInterface {
 				$allocRight = $this->allocateFreeRegisterFrom($allocRight, true);
 				// prev $allocRight doesn't need deallocation because it's not a register
 			}
+			$this->deallocateRegister($allocRight);
 			$allocRightU8 = (object) [
 				'type' => self::ALLOCATION_REGISTER,
 				'value' => $allocRight->value,
@@ -966,6 +980,8 @@ class GeneratorFasm_win_x86_64 implements GeneratorInterface {
 			$this->emit('sar', $allocLeft, $allocRightU8);
 			return $allocLeft;
 		}
+
+		$this->deallocateIfRegister($allocRight);
 
 
 		// todo: maybe zero other bits except the lowest one (cast to bool)
@@ -1024,10 +1040,10 @@ class GeneratorFasm_win_x86_64 implements GeneratorInterface {
 			) {
 				return $alloc;
 			}
-			// -stack1/literal
+			// (op) stack/immediate
 			//   ->
-			// reg = stack1/literal
-			// reg = -reg
+			// reg = stack/immediate
+			// reg = (op) reg
 			$alloc = $this->allocateFreeRegisterFrom($alloc);
 			// prev $alloc doesn't need deallocation because it's not a register
 		}
@@ -1064,13 +1080,13 @@ class GeneratorFasm_win_x86_64 implements GeneratorInterface {
 		}
 
 		if ($node->prefix || !$isResultUsed) {
-			return $this->generateIncrement($node->value, $step);
+			return $this->generateIncrementVariable($node->value, $step);
 		}
 
 		$alloc = $this->generateExpressionIdentifier($node->value);
 		$allocRes = $this->allocateFreeRegister($alloc->size);
 		$this->emit('mov', $allocRes, $alloc);
-		$this->generateIncrement($node->value, $step);
+		$this->generateIncrementVariable($node->value, $step);
 		return $allocRes;
 	}
 
@@ -1079,7 +1095,7 @@ class GeneratorFasm_win_x86_64 implements GeneratorInterface {
 	 * @param int $step
 	 * @return Allocation
 	 */
-	protected function generateIncrement(object $node, int $step): object {
+	protected function generateIncrementVariable(object $node, int $step): object {
 		$identifier = $node->name;
 
 		if (!isset($this->identifiers[$identifier])) {
@@ -1176,10 +1192,10 @@ class GeneratorFasm_win_x86_64 implements GeneratorInterface {
 
 		$this->emitComment("{$identifier} {$node->operator} (...)");
 		if ($allocRight->type === self::ALLOCATION_STACK) {
-			// stack1 += stack2
+			// stack1 (op) stack2
 			//   ->
 			// reg = stack2
-			// stack1 += reg
+			// stack1 (op) reg
 			$allocRight = $this->allocateFreeRegisterFrom($allocRight);
 		}
 		$this->deallocateIfRegister($allocRight);
@@ -1294,9 +1310,9 @@ class GeneratorFasm_win_x86_64 implements GeneratorInterface {
 	/**
 	 * @param Allocation|object $alloc
 	 * @param string $label
-	 * @param string $operator
+	 * @param string|null $operator
 	 */
-	protected function generateCmpJumpToLabel(object $alloc, string $label, string $operator): void {
+	protected function generateCmpJumpToLabel(object $alloc, string $label, ?string $operator = null): void {
 		if ($alloc->type === self::ALLOCATION_CMP_FLAG) {
 			if ($operator === '==') {
 				$this->emitJump('je', $label);
@@ -1313,12 +1329,7 @@ class GeneratorFasm_win_x86_64 implements GeneratorInterface {
 			}
 		} else {
 			if ($alloc->type === self::ALLOCATION_STACK) {
-				$zero = (object) [
-					'type' => self::ALLOCATION_IMMEDIATE,
-					'value' => 0,
-					'size' => 0,
-				];
-				$this->emit('cmp', $alloc, $zero);
+				$this->emit('cmp', $alloc, $this->createImmediate(0));
 			} else {
 				$this->emit('test', $alloc, $alloc);
 			}
@@ -1329,9 +1340,9 @@ class GeneratorFasm_win_x86_64 implements GeneratorInterface {
 	/**
 	 * @param Allocation|object $alloc
 	 * @param string $label
-	 * @param string $operator
+	 * @param string|null $operator
 	 */
-	protected function generateCmpNegativeJumpToLabel(object $alloc, string $label, string $operator): void {
+	protected function generateCmpNegativeJumpToLabel(object $alloc, string $label, ?string $operator = null): void {
 		if ($alloc->type === self::ALLOCATION_CMP_FLAG) {
 			if ($operator === '==') {
 				$this->emitJump('jne', $label); // !=
@@ -1348,12 +1359,7 @@ class GeneratorFasm_win_x86_64 implements GeneratorInterface {
 			}
 		} else {
 			if ($alloc->type === self::ALLOCATION_STACK) {
-				$zero = (object) [
-					'type' => self::ALLOCATION_IMMEDIATE,
-					'value' => 0,
-					'size' => 0,
-				];
-				$this->emit('cmp', $alloc, $zero);
+				$this->emit('cmp', $alloc, $this->createImmediate(0));
 			} else {
 				$this->emit('test', $alloc, $alloc);
 			}
@@ -1381,9 +1387,9 @@ class GeneratorFasm_win_x86_64 implements GeneratorInterface {
 
 		$alloc = $this->generateExpression($condition, true, true);
 		if ($alloc->type === self::ALLOCATION_IMMEDIATE) {
-			// if (literal)
+			// if (immediate)
 			//   ->
-			// reg = literal
+			// reg = immediate
 			// if (reg)
 			// not using zeroAsXor because "if (0)" should not happen
 			// after optimizing "always true/always false" conditions
@@ -1391,13 +1397,16 @@ class GeneratorFasm_win_x86_64 implements GeneratorInterface {
 		}
 		$this->deallocateIfRegister($alloc);
 
+		$operator = ($alloc->type === self::ALLOCATION_CMP_FLAG)
+			? $condition->operator
+			: null;
 		if ($node->else === null) {
-			$this->generateCmpNegativeJumpToLabel($alloc, $labelEndIf, $condition->operator);
+			$this->generateCmpNegativeJumpToLabel($alloc, $labelEndIf, $operator);
 			$this->emitComment("then");
 			$this->generateThenBlock($node->then, $labelEndIf);
 		} else {
 			$labelThen = $this->newLabel();
-			$this->generateCmpJumpToLabel($alloc, $labelThen, $condition->operator);
+			$this->generateCmpJumpToLabel($alloc, $labelThen, $operator);
 
 			if ($node->else->node !== NodeType::STATEMENT_ELSE_IF) {
 				$this->emitComment("else");
@@ -1463,9 +1472,9 @@ class GeneratorFasm_win_x86_64 implements GeneratorInterface {
 			$this->emitLabel($labelCondition);
 			$alloc = $this->generateExpression($condition, true, true);
 			if ($alloc->type === self::ALLOCATION_IMMEDIATE) {
-				// while (literal)
+				// while (immediate)
 				//   ->
-				// reg = literal
+				// reg = immediate
 				// while (reg)
 				// not using zeroAsXor because "while (0)" should not happen
 				// after optimizing "always true/always false" conditions
@@ -1520,7 +1529,7 @@ class GeneratorFasm_win_x86_64 implements GeneratorInterface {
 			}
 
 			$this->emitLabel($labelContinue);
-			$allocLeft = $this->generateIncrement($identifier, $step);
+			$allocLeft = $this->generateIncrementVariable($identifier, $step);
 			$this->emitLabel($labelCondition);
 
 			$allocRight = $this->generateExpression($node->to, true); // todo: ? disable variable modifications during this
@@ -1580,9 +1589,9 @@ class GeneratorFasm_win_x86_64 implements GeneratorInterface {
 		$this->stackPos = $prevStackPos;
 	}
 
-	protected function debug(string $message): void {
+	/* protected function debug(string $message): void {
 		fwrite(STDERR, $message . "\n");
-	}
+	} */
 
 	/**
 	 * @param NodeStmtExpression|object $node

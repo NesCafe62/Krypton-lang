@@ -14,7 +14,7 @@ class Token {
 	/** @var int */
 	public $col;
 
-	public function __construct(int $tokenType, int $line, int $col, $value = null) {
+	public function __construct(int $tokenType, int $line, int $col, ?string $value = null) {
 		$this->token = $tokenType;
 		$this->value = $value;
 		$this->line = $line;

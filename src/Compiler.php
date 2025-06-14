@@ -1,5 +1,5 @@
 <?php
-require_once('Enum\CompileTarget.php');
+require_once('Enum/CompileTarget.php');
 
 require_once('Lang/Exceptions/CompilerException.php');
 require_once('Lang/Exceptions/CompilerRuntimeException.php');
@@ -54,8 +54,9 @@ class Compiler {
 	public function compile(string $code, string $fileName, GeneratorInterface $generator): void {
 		$tokens = $this->tokenizer->tokenize($code, $fileName);
 		/* foreach ($tokens as $token) {
-			echo $token->display() . " {$token->line}:{$token->col}\n";
-		} */
+			echo Lang::displayToken($token->token, $token->value) . " {$token->line}:{$token->col}\n";
+		}
+		exit; */
 
 		$tokens = $this->tokensStream->transformTokens($tokens, $this->extensions);
 

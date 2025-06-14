@@ -18,8 +18,8 @@ class TokenType {
 	public const SQUARE_OPEN = 9;
 	public const SQUARE_CLOSE = 10;
 
-	public const TYPE_PARAM_OPEN = 10;
-	public const TYPE_PARAM_CLOSE = 11;
+	public const TYPE_PARAM_OPEN = 11;
+	public const TYPE_PARAM_CLOSE = 12;
 
 	// public const KEYWORD = 13;
 	public const IDENTIFIER = 13;
@@ -39,8 +39,8 @@ class TokenType {
 	public const KEYWORD_ELSE = 104;
 	public const KEYWORD_FOR = 105;
 	public const KEYWORD_IN = 106;
-	public const KEYWORD_DO = 107;
-	public const KEYWORD_WHILE = 108;
+	public const KEYWORD_WHILE = 107;
+	public const KEYWORD_REPEAT = 108;
 	public const KEYWORD_SWITCH = 109;
 	public const KEYWORD_CASE = 110;
 	public const KEYWORD_BREAK = 111;
