@@ -217,6 +217,7 @@ Making custom extension:
 ## Editors support
 
 - Intellij
+
 Plugin: https://github.com/NesCafe62/Krypton-intellij-plugin
 
 Alternatively TextMate bundle available (but it will not add file type): https://github.com/NesCafe62/Krypton-intellij-plugin/tree/main/src/main/resources/bundles/krypton
