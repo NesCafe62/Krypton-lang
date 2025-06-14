@@ -230,7 +230,47 @@ $ git clone https://github.com/NesCafe62/Krypton-lang.git .
 
 2. Add `php` to system path (optional)
 
-## Usage
+---
+## Usage makefile
+> Only windows for now
+
+Set executable and target in Makefile to desired values:
+```
+EXECUTABLE = test4
+TARGET = fasm-win-x86-64
+```
+
+Compile .kr file to .asm:
+```sh
+$ make compile
+```
+
+Compile .asm file to .exe:
+```sh
+$ make compile-exe
+```
+
+Compile .kr file to .exe:
+```sh
+$ make build
+```
+
+Compile .kr file to .exe and run it:
+```sh
+$ make all
+```
+
+Compile .kr file to .ast:
+```sh
+$ make dump-ast
+```
+
+Clean all compilation files (asm, exe, ast)
+```sh
+$ make clean
+```
+
+## Usage cmd
 
 compile .kr file to .asm (target = `fasm-win-x86-64`)
 ```sh
