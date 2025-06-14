@@ -214,7 +214,7 @@ Making custom extension:
 - [ ] LLVM IR {probably}
 
 
----
+
 ## Installation
 Requirements:
 
@@ -230,7 +230,7 @@ $ git clone https://github.com/NesCafe62/Krypton-lang.git .
 
 2. Add `php` to system path (optional)
 
----
+
 ## Usage makefile
 > Only windows for now
 
